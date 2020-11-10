@@ -59,9 +59,11 @@
   (esrap:defrule Yattr (and "y=" ws IntegerString) (:destructure (y ws str) (list y ws str)))
   (esrap:defrule WidthAttr (and "width=" ws IntegerString) (:destructure (w ws str) (list w ws str)))
   (esrap:defrule HeightAttr (and "height=" ws IntegerString) (:destructure (h ws str) (list h ws str)))
-  (esrap:defrule IntegerString (* (character-ranges (#\0 #\9))) (:lambda (x) x))
+  (esrap:defrule IntegerString 
+      (* (character-ranges (#\0 #\9)))
+    (:lambda (x) x))
   (esrap:defrule ws #\Space)
-
-
+  
+  
   (esrap:parse 'SVGElement svgRectString))
 
