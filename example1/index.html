@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>Example 1 using ohm/js</title>
+    <meta charset=utf-8>
+    <script src="../node_modules/ohm-js/dist/ohm.js"></script>
+
+
+    <script type="text/ohm-js">
+      Example1 {
+	  OneA = "a"
+      }
+    </script>
+
+    
+  </head>
+  
+    <script>
+      const text = "a";
+      const ohmParser = ohm.grammarFromScriptElement();
+      const result = ohmParser.match (text);
+
+      function displayTestResults(s,el) {
+      }
+      function run () {
+	  if (result.succeeded ()) {
+	      document.getElementById('result').innerHTML = "Ohm matching succeeded";
+	  } else {
+	      document.getElementById('result').innerHTML = "Ohm matching failed";
+	  }
+	  document.getElementById('timestamp').innerHTML = Date();
+      }
+    </script>
+
+  <body>
+    <button onclick="run()">Run</button>
+    <p id="timestamp"></p>
+    <p id="result"></p>
+  </body>
+</html>

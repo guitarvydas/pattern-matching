@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <title>Example 3 using ohm/js</title>
+    <meta charset=utf-8>
+    <script src="../node_modules/ohm-js/dist/ohm.js"></script>
+
+
+    <script type="text/ohm-js">
+      Example1 {
+	  OneAThenOneB = OneA OneB
+	  OneA = "a"
+	  OneB = "b"
+      }
+    </script>
+
+    
+  </head>
+    Example 3
+    <script>
+      const text = "ab";
+      const ohmParser = ohm.grammarFromScriptElement();
+      const result = ohmParser.match (text);
+
+      function displayTestResults(s,el) {
+      }
+      function run () {
+	  if (result.succeeded ()) {
+	      var semantics = ohmParser.createSemantics ();
+	      semantics.addOperation (
+		  'flip',
+		  {
+		      OneAThenOneB: function (a, b) { 
+			  return `${b.flip ()}${a.flip ()}`;
+		      },
+		      OneA: function (a) { return a.flip (); },
+		      OneB: function (b) { return b.flip ();},
+		      _terminal: function() { return this.primitiveValue; }
+		  }
+	      );
+	      document.getElementById('result').innerHTML = semantics (result).flip ();
+	  } else {
+	      document.getElementById('result').innerHTML = "Ohm matching failed";
+	  }
+	  document.getElementById('timestamp').innerHTML = Date();
+      }
+    </script>
+
+  <body>
+    <button onclick="run()">Run</button>
+    <p id="timestamp"></p>
+    <p id="result"></p>
+  </body>
+</html>
