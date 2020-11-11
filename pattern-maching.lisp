@@ -1,9 +1,4 @@
 
-(defun regex3 ()
-  (cl-ppcre::register-groups-bind (first second) 
-      ("(a)(b)" text2)
-    (list second first)))
-
 (defun esrap3 ()
   (esrap:defrule oneA #\a (:lambda (x) x))
   (esrap:defrule oneB #\b (:lambda (x) x))
