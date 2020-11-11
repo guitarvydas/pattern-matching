@@ -1,17 +1,4 @@
 
-(defparameter text2 "ab")
-
-(defun regex2 ()
-  (cl-ppcre::register-groups-bind (first second) 
-      ("(a)(b)" text2)
-    (list first second)))
-
-(defun esrap2 ()
-  (esrap:defrule oneA #\a (:lambda (x) x))
-  (esrap:defrule oneB #\b (:lambda (x) x))
-  (esrap:defrule oneAThenOneB (and oneA oneB) (:lambda (x) x))
-  (esrap:parse 'oneAThenOneB text2))
-
 (defun regex3 ()
   (cl-ppcre::register-groups-bind (first second) 
       ("(a)(b)" text2)
