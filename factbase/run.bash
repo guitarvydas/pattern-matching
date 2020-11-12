@@ -1,4 +1,4 @@
 #!/bin/bash
-node factbase-ohm.js
+node factbase-ohm.js > transpiled.html
 
 

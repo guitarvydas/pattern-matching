@@ -37,6 +37,7 @@ const text = `
 </html>
 `;
 
+
 //
 // grammar(s)
 //
@@ -85,14 +86,10 @@ var gparser = grammar_namespace["htmlSVGUnity"];
 const result = gparser.match (text);
 
 if (result.succeeded ()) {
-    console.log ("Ohm matching succeeded");
     var semantics = gparser.createSemantics ();
     make_semantics_UnitySVG (semantics);
     make_semantics_Factbase (semantics);
     make_semantics_AddFactbaseToHTML (semantics);
-    console.log ('svg unitySVG ohm:');
-    console.log (semantics (result).unitySVG ());
-    console.log ('add factbase ohm:');
     console.log (semantics (result).addFactbaseToHTML ());
 } else {
     console.log ("Ohm matching failed");
@@ -186,7 +183,6 @@ function make_semantics_Factbase (semantics) {
 	    htmlElement: function (html, wss) { throw "INTERNAL ERROR"; },
 	    headerStuff: function (stuff) { throw "INTERNAL ERROR"; },
 	    bodyElement: function (body, wss) { throw "INTERNAL ERROR"; },
-	    bodyStuff: function (stuff) { throw "INTERNAL ERROR"; },
 	    notBody:function (c) { throw "INTERNAL ERROR"; },
 	    notBodyEnd: function (c) { throw "INTERNAL ERROR"; },
 	    bodyElementEnd: function (body, wss) { throw "INTERNAL ERROR"; },
@@ -265,13 +261,12 @@ function make_semantics_AddFactbaseToHTML (semantics) {
 	    htmlElement: function (html, wss) { return "<" + "html>" + wss.addFactbaseToHTML ().join (''); },
 	    headerStuff: function (stuff) { return stuff.addFactbaseToHTML ().join (''); },
 	    bodyElement: function (body, wss) { return "<" + "body>" + wss.addFactbaseToHTML ().join ('')},
-	    bodyStuff: function (stuff) { return stuff.addFactbaseToHTML ().join (''); },
 	    notBody:function (c) { return c.unitySVG (); },
 	    notBodyEnd: function (c) { return c.unitySVG (); },
 	    bodyElementEnd: function (body, wss) { return "<" + "/body>" + wss.unitySVG ().join ('');},
 	    htmlEnd: function (html, wss) { return "<" + "/html>" + wss.unitySVG ().join ('');},
 
-	    bodyStuff: function (pres, svg, post) { return pres.addFactbaseToHTML ().join('') + svg.addFactbaseToHTML () + post.addFactbaseToHTML (); },
+	    bodyStuff: function (pre_plural, svg, post_plural) { return pre_plural.addFactbaseToHTML ().join('') + svg.addFactbaseToHTML () + post_plural.addFactbaseToHTML ().join (''); },
 
 	    bodyStuffPre: function (c) { return c.addFactbaseToHTML (); },
 	    bodyStuffPost: function (stuff) { return stuff.unitySVG (); },
@@ -279,7 +274,7 @@ function make_semantics_AddFactbaseToHTML (semantics) {
 	    // the switcheroo happens here
 	    // emit the raw unity HTML, plus the factbase for the SVG (as a <script> of "fact" calls) 
 	    svgSection: function (svg, wh, _gt, wss1, elements, endSvg, wss2) {
-		return svg.unitySVG () + wh.unitySVG () + ">" +
+		return svg.addFactbaseToHTML () + wh.unitySVG () + ">" +
 		    wss1.unitySVG ().join ('') + elements.unitySVG ().join ("") + "<" + "/svg>" +
 		    wss2.unitySVG ().join ('') +
 		    "<" + "script>\n" +
