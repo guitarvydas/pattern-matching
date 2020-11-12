@@ -110,21 +110,62 @@ function addUnitySVG (semantics) {
 	    ws: function (c) { return c.unitySVG (); },
 
 // additions / overriden for SVG
-	    bodyStuff: function (bodyStuffPre_plural, svgSection, bodyStuffPost_plural) {},
-	    bodyStuffPre: function (any) {},
-	    bodyStuffPost: function (any) {},
-	    svgSection: function (svgHeader, wh, _gt, ws2_plural, rectOrText_plural, _slash_scg, ws2_plural) {},
-	    rect: function (_rect, ws1_plural, id, xywh, _gt, ws2_plural, _slash_rect, ws3_plural) {},
-	    text: function (_text, ws1_plural, id, xy, _gt, ws2_plural, htmlchar_pural, _slashtext, ws3_plural) {},
-	    id: function (_id, str) {},
-	    xywh: function (xy, wh) {},
-	    xy: function (_x, n, _y, n2) {},
-	    wh: function (_width, n, _height, n2) {},
-	    htmlchar: function (any) {},
-	    numString: function (_q1, digit_plural, _q2, ws_plural) {},
-	    xstring: function (_q1, notDQuote_plural, _q2, ws_plural) {},
-	    notDQuote: function (any) {},
-	    svgHeader: function (_svg, any) {},
+	    bodyStuff: function (bodyStuffPre_plural, svgSection, bodyStuffPost_plural) {
+		return bodyStuffPre_plural.unitySVG ().join ('') + 
+		    svgSection.unitySVG () +
+		    bodyStuffPost_plural.unitySVG ().join ('');
+	    },
+	    bodyStuffPre: function (any) { return any.unitySVG (); },
+	    bodyStuffPost: function (any) { return any.unitySVG (); },
+	    svgSection: function (svgHeader, wh, _gt, ws2_plural, rectOrText_plural, _slash_svg, ws2_plural) {
+		return svgHeader.unitySVG () +
+		    wh.unitySVG () +
+		    _gt.unitySVG () +
+		    ws2_plural.unitySVG ().join ('') +
+		    rectOrText_plural.unitySVG ().join ('') +
+		    _slash_svg.unitySVG () +
+		    ws2_plural.unitySVG ().join ('');
+	    },
+	    rect: function (_rect, ws1_plural, id, xywh, _gt, ws2_plural, _slash_rect, ws3_plural) {
+		return _rect.unitySVG () +
+		    ws1_plural.unitySVG ().join ('') +
+		    id.unitySVG () + 
+		    xywh.unitySVG () +
+		    _gt.unitySVG () +
+		    ws2_plural.unitySVG ().join ('') +
+		    _slash_rect.unitySVG () +
+		    ws3_plural.unitySVG ().join ('');
+	    },
+	    text: function (_text, ws1_plural, id, xy, _gt, ws2_plural, htmlchar_plural, _slash_text, ws3_plural) {
+	    	return _text.unitySVG () +
+		    ws1_plural.unitySVG ().join ('') +
+		    id.unitySVG () + 
+		    xy.unitySVG () +
+		    _gt.unitySVG () +
+		    ws2_plural.unitySVG ().join ('') +
+		    htmlchar_plural.unitySVG ().join ('') +
+		    _slash_text.unitySVG () +
+		    ws3_plural.unitySVG ().join ('');
+	    },
+	    id: function (_id, str) { return _id.unitySVG () + str.unitySVG ();},
+	    xywh: function (xy, wh) { return xy.unitySVG () + wh.unitySVG ()},
+	    xy: function (_x, n, _y, n2) {return _x.unitySVG () + n.unitySVG () + _y.unitySVG () + n2.unitySVG (); },
+	    wh: function (_width, n, _height, n2) { return _width.unitySVG () + n.unitySVG () + _height.unitySVG () + n2.unitySVG (); },
+	    htmlchar: function (any) { return any.unitySVG (); },
+	    numString: function (_q1, digit_plural, _q2, ws_plural) { 
+		return _q1.unitySVG () + 
+		    digit_plural.unitySVG ().join ('') + 
+		    _q2.unitySVG() + 
+		    ws_plural.unitySVG ().join (''); 
+	    },
+	    xstring: function (_q1, notDQuote_plural, _q2, ws_plural) { 
+		return _q1.unitySVG () + 
+		    notDQuote_plural.unitySVG ().join ('') + 
+		    _q2.unitySVG () +
+		    ws_plural.unitySVG ().join (''); 
+	    },
+	    notDQuote: function (any) { return any.unitySVG (); },
+	    svgHeader: function (_svg, any) { return any.unitySVG (); },
 	    
 	    ws: function (c) { return c.unitySVG (); },
 
