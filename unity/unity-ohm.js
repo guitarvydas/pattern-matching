@@ -57,7 +57,7 @@ if (result.succeeded ()) {
     console.log ("Ohm matching succeeded");
     var semantics = ohmParser.createSemantics ();
     addUnity (semantics);
-    console.log ('example6 ohm unity:');
+    console.log ('unity ohm:');
     console.log (semantics (result).unity ());
 } else {
     console.log ("Ohm matching failed");
@@ -67,16 +67,17 @@ function addUnity (semantics) {
     semantics.addOperation (
 	'unity',
 	{
-	    html: function (ws1, htmlElement, headerStuff, bodyElement, bodyStuff, bodyElementEnd, htmlEnd) {},
-	    htmlElement: function (html, ws_plural) {},
-	    headerStuff: function (notBody_plural) {},
-	    bodyElement: function (body, ws_plural) {},
-	    bodyStuff: function (notBodyEnd_plural) {},
-	    notBody: function (any) {},
-	    notBodyEnd: function (any) {},
-	    bodyElementEnd: function (slash_body, ws_plural) {},
-	    htmlEnd: function (slash_html, ws_plural) {},
-	    ws: function (c) {},
+	    html: function (ws_plural, htmlElement, headerStuff, bodyElement, bodyStuff, bodyElementEnd, htmlEnd) { return ws_plural.unity ().join ('') + htmlElement.unity () + headerStuff.unity () +
+														    bodyElement.unity () + bodyStuff.unity () + bodyElementEnd.unity () + htmlEnd.unity (); },
+	    htmlElement: function (html, ws_plural) { return html.unity () + ws_plural.unity ().join('');},
+	    headerStuff: function (notBody_plural) { return notBody_plural.unity ().join(''); },
+	    bodyElement: function (body, ws_plural) { return body.unity () + ws_plural.unity ().join (''); },
+	    bodyStuff: function (notBodyEnd_plural) { return notBodyEnd_plural.unity ().join (''); },
+	    notBody: function (any) { return any.unity (); },
+	    notBodyEnd: function (any) { return any.unity (); },
+	    bodyElementEnd: function (slash_body, ws_plural) { return slash_body.unity () + ws_plural.unity ().join (''); },
+	    htmlEnd: function (slash_html, ws_plural) { return slash_html.unity () + ws_plural.unity ().join (''); },
+	    ws: function (c) { return c.unity (); },
 	    _terminal: function() { return this.primitiveValue; }
 	}
     );};
