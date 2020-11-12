@@ -87,14 +87,18 @@ const result = gparser.match (text);
 if (result.succeeded ()) {
     console.log ("Ohm matching succeeded");
     var semantics = gparser.createSemantics ();
-    addUnitySVG (semantics);
+    make_semantics_UnitySVG (semantics);
+    make_semantics_Factbase (semantics);
+    make_semantics_AddFactbaseToHTML (semantics);
     console.log ('svg unitySVG ohm:');
     console.log (semantics (result).unitySVG ());
+    console.log ('add factbase ohm:');
+    console.log (semantics (result).addFactbaseToHTML ());
 } else {
     console.log ("Ohm matching failed");
 }
 
-function addUnitySVG (semantics) {
+function make_semantics_UnitySVG (semantics) {
     semantics.addOperation (
 	'unitySVG',
 	{
@@ -172,3 +176,146 @@ function addUnitySVG (semantics) {
 	    _terminal: function() { return this.primitiveValue; }
 	}
     );};
+
+
+function make_semantics_Factbase (semantics) {
+    semantics.addOperation (
+	'toFactbase',
+	{
+	    html: function (wss, htmlElement, headerStuff, bodyElement, bodyStuff, bodyElementEnd, htmlEnd) { throw "INTERNAL ERROR"; },
+	    htmlElement: function (html, wss) { throw "INTERNAL ERROR"; },
+	    headerStuff: function (stuff) { throw "INTERNAL ERROR"; },
+	    bodyElement: function (body, wss) { throw "INTERNAL ERROR"; },
+	    bodyStuff: function (stuff) { throw "INTERNAL ERROR"; },
+	    notBody:function (c) { throw "INTERNAL ERROR"; },
+	    notBodyEnd: function (c) { throw "INTERNAL ERROR"; },
+	    bodyElementEnd: function (body, wss) { throw "INTERNAL ERROR"; },
+	    htmlEnd: function (html, wss) { throw "INTERNAL ERROR"; },
+
+	    bodyStuff: function (pres, svg, post) { throw "INTERNAL ERROR"; },
+
+	    bodyStuffPre: function (c) { throw "INTERNAL ERROR"; },
+	    bodyStuffPost: function (stuff) { throw "INTERNAL ERROR"; },
+	    svgSection: function (svg, wh, _gt, wss1, elements, endSvg, wss2) { throw "INTERNAL ERROR"; },
+
+	    // a fact, in general, is a triple { relation, subject, object }
+	    // a factbase, in general, is a collection of triples
+	    // we create facts by calling the JS "fact" function
+
+	    // rect returns an array[4] of fact strings
+	    rect: function (_rect, _wss1, idTree, xywhTree, _gt, _wss2, _endRect, _wss3) {
+		var result = [];
+		var id = idTree.toFactbase ();
+		var xywh = xywhTree.toFactbase ();
+		result.push (`fact ("rect_x", ${id}, ${xywh[0]});`);
+		result.push (`fact ("rect_y", ${id}, ${xywh[1]});`);
+		result.push (`fact ("rect_w", ${id}, ${xywh[2]});`);
+		result.push (`fact ("rect_h", ${id}, ${xywh[3]});`);
+		return result.join('\n'); 
+	    },
+	    // text returns an array[3] of fact strings
+	    text: function (_text, wss1, idTree, xyTree, _gt, wss2, chars, _endText, wss3) {
+		var result =[];
+		var id = idTree.toFactbase ();
+		var xy = xyTree.toFactbase ();
+		result.push (`fact ("text_x", ${id}, ${xy[0]});`);
+		result.push (`fact ("text_y", ${id}, ${xy[1]});`);
+		result.push (`fact ("text_text", ${id}, "${chars.unitySVG().join('')}");`);
+		return result.join('\n'); 
+	    },
+	    id: function (_ideq, id) { return id.toFactbase (); },
+	    xywh: function (xy, wh) { return xy.toFactbase ().concat (wh.toFactbase ()); },
+	    xy: function (_xeq, xnum, _yeq, ynum) {
+		return [xnum.toFactbase (), ynum.toFactbase ()]; 
+	    },
+	    wh: function (_weq, wnum, _heq, hnum) {
+		return [wnum.toFactbase (), hnum.toFactbase ()]; 
+	    },
+	    htmlchar: function (c) { return c.toFactbase (); },
+	    numString: function (_q1, ds, _q2, _wss) { 
+		return parseInt(ds.unitySVG ().join (''))},
+	    xstring: function (_q1, cs, _q2, wss) { 
+		return '"' + cs.toFactbase ().join ('') + '"';
+	    },
+	    notDQuote: function (c) { return c.toFactbase (); },
+
+	    svgHeader: function (_svg, wss) { throw "INTERNAL ERROR"; },
+
+	    ws: function (c) { 
+		return c.toFactbase ();
+	    },
+
+	    _terminal: function () { return this.primitiveValue; }
+	});
+};
+    
+function make_semantics_AddFactbaseToHTML (semantics) {
+    semantics.addOperation (
+	'addFactbaseToHTML',
+	// glue the Factbase (as a <script>) to the raw HTML
+
+	// implementation note: every rule before svgSection calls .addFactbaseToHTML(),
+	//   every rule after svgSection can call .unitySVG()
+	//   the gluing happens in svgSection, after which it is business as usual (.unitySVG)
+
+	{
+	    html: function (wss, htmlElement, headerStuff, bodyElement, bodyStuff, bodyElementEnd, htmlEnd) {
+		return wss.addFactbaseToHTML ().join ('') + htmlElement.addFactbaseToHTML () + headerStuff.addFactbaseToHTML () + bodyElement.addFactbaseToHTML () + bodyStuff.addFactbaseToHTML () + bodyElementEnd.addFactbaseToHTML () + htmlEnd.addFactbaseToHTML (); 
+	    },
+	    htmlElement: function (html, wss) { return "<" + "html>" + wss.addFactbaseToHTML ().join (''); },
+	    headerStuff: function (stuff) { return stuff.addFactbaseToHTML ().join (''); },
+	    bodyElement: function (body, wss) { return "<" + "body>" + wss.addFactbaseToHTML ().join ('')},
+	    bodyStuff: function (stuff) { return stuff.addFactbaseToHTML ().join (''); },
+	    notBody:function (c) { return c.unitySVG (); },
+	    notBodyEnd: function (c) { return c.unitySVG (); },
+	    bodyElementEnd: function (body, wss) { return "<" + "/body>" + wss.unitySVG ().join ('');},
+	    htmlEnd: function (html, wss) { return "<" + "/html>" + wss.unitySVG ().join ('');},
+
+	    bodyStuff: function (pres, svg, post) { return pres.addFactbaseToHTML ().join('') + svg.addFactbaseToHTML () + post.addFactbaseToHTML (); },
+
+	    bodyStuffPre: function (c) { return c.addFactbaseToHTML (); },
+	    bodyStuffPost: function (stuff) { return stuff.unitySVG (); },
+
+	    // the switcheroo happens here
+	    // emit the raw unity HTML, plus the factbase for the SVG (as a <script> of "fact" calls) 
+	    svgSection: function (svg, wh, _gt, wss1, elements, endSvg, wss2) {
+		return svg.unitySVG () + wh.unitySVG () + ">" +
+		    wss1.unitySVG ().join ('') + elements.unitySVG ().join ("") + "<" + "/svg>" +
+		    wss2.unitySVG ().join ('') +
+		    "<" + "script>\n" +
+		    elements.toFactbase ().join("\n") +
+		    "\n</script>\n"
+		;
+	    },
+	    
+	    rect: function (_rect, wss1, id, xywh, gt, wss2, _endRect, wss3) { throw "INTERNAL ERROR"; },
+	    text: function (_text, wss1, id, xy, _gt, wss2, cs, _endText, wss3) { throw "INTERNAL ERROR"; },
+
+	    id: function (ideq, id) { return "\"id${id.addFactbaseToHTML ()}\""; },
+	    xywh: function (xy, wh) { return xy.unitySVG () + wh.unitySVG (); },
+	    xy: function (xeq, xnum, yeq, ynum) {
+		return "x=" + xnum.unitySVG () + "y=" + ynum.unitySVG (); 
+	    },
+	    wh: function (weq, wnum, heq, hnum) {
+		return "width=" + wnum.unitySVG () + "height=" + hnum.unitySVG (); 
+	    },
+	    htmlchar: function (c) { return c.unitySVG (); },
+	    numString: function (_q1, ds, _q2, wss) {
+		return '"' + ds.unitySVG ().join ('') + '"' + wss.unitySVG ().join ('');
+	    },
+	    xstring: function (_q1, cs, _q2, wss) { 
+		return '"' + cs.unitySVG ().join ('') + '"' + wss.unitySVG ().join ('');
+	    },
+	    notDQuote: function (c) { return c.unitySVG (); },
+
+	    svgHeader: function (_svg, wss) {
+		return "<" + "svg" + wss.unitySVG ().join ('');
+	    },
+
+	    ws: function (c) { 
+		return c.unitySVG ();
+	    },
+
+	    _terminal: function () { return this.primitiveValue; }
+	});
+};
