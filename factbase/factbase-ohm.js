@@ -198,22 +198,24 @@ function make_semantics_Factbase (semantics) {
 	    // a factbase, in general, is a collection of triples
 	    // we create facts by calling the JS "fact" function
 
-	    // rect returns an array[4] of fact strings
+	    // rect returns an array[5] of fact strings
 	    rect: function (_rect, _wss1, idTree, xywhTree, _gt, _wss2, _endRect, _wss3) {
 		var result = [];
 		var id = idTree.toFactbase ();
 		var xywh = xywhTree.toFactbase ();
+		result.push (`fact ("rect", ${id}, true);`);
 		result.push (`fact ("rect_x", ${id}, ${xywh[0]});`);
 		result.push (`fact ("rect_y", ${id}, ${xywh[1]});`);
 		result.push (`fact ("rect_w", ${id}, ${xywh[2]});`);
 		result.push (`fact ("rect_h", ${id}, ${xywh[3]});`);
 		return result.join('\n'); 
 	    },
-	    // text returns an array[3] of fact strings
+	    // text returns an array[4] of fact strings
 	    text: function (_text, wss1, idTree, xyTree, _gt, wss2, chars, _endText, wss3) {
 		var result =[];
 		var id = idTree.toFactbase ();
 		var xy = xyTree.toFactbase ();
+		result.push (`fact ("text", ${id}, true);`);
 		result.push (`fact ("text_x", ${id}, ${xy[0]});`);
 		result.push (`fact ("text_y", ${id}, ${xy[1]});`);
 		result.push (`fact ("text_text", ${id}, "${chars.unitySVG().join('')}");`);
