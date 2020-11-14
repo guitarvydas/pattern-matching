@@ -1,7 +1,5 @@
 // create bounding boxes for rectangles and text
 
-//create bounding boxes for rectangles and text
-
 main
   create-rect-bounding-boxes
   create-text-bounding-boxes
