@@ -203,11 +203,11 @@ function make_semantics_Factbase (semantics) {
 		var result = [];
 		var id = idTree.toFactbase ();
 		var xywh = xywhTree.toFactbase ();
-		result.push (`fact ("rect", ${id}, _);`);
-		result.push (`fact ("rect-x", ${id}, ${xywh[0]});`);
-		result.push (`fact ("rect-y", ${id}, ${xywh[1]});`);
-		result.push (`fact ("rect-w", ${id}, ${xywh[2]});`);
-		result.push (`fact ("rect-h", ${id}, ${xywh[3]});`);
+		result.push (`fact ("rect", functor0 (${id}), functor0 (_));`);
+		result.push (`fact ("rect-x", functor0 (${id}), functor0 (${xywh[0]}));`);
+		result.push (`fact ("rect-y", functor0 (${id}), functor0 (${xywh[1]}));`);
+		result.push (`fact ("rect-w", functor0 (${id}), functor0 (${xywh[2]}));`);
+		result.push (`fact ("rect-h", functor0 (${id}), functor0 (${xywh[3]}));`);
 		return result.join('\n'); 
 	    },
 	    // text returns an array[5] of fact strings
@@ -215,11 +215,11 @@ function make_semantics_Factbase (semantics) {
 		var result =[];
 		var id = idTree.toFactbase ();
 		var xy = xyTree.toFactbase ();
-		result.push (`fact ("text", ${id}, _);`);
-		result.push (`fact ("text-x", ${id}, ${xy[0]});`);
-		result.push (`fact ("text-y", ${id}, ${xy[1]});`);
-		result.push (`fact ("text-font", ${id}, 12);`);
-		result.push (`fact ("text-text", ${id}, "${chars.unitySVG().join('')}");`);
+		result.push (`fact ("text", functor0 (${id}), functor0 (_));`);
+		result.push (`fact ("text-x", functor0 (${id}), functor0 (${xy[0]}));`);
+		result.push (`fact ("text-y", functor0 (${id}), functor0 (${xy[1]}));`);
+		result.push (`fact ("text-font", functor0 (${id}), functor0 (12));`);
+		result.push (`fact ("text-text", functor0 (${id}), functor0 ("${chars.unitySVG().join('')}"));`);
 		return result.join('\n'); 
 	    },
 	    id: function (_ideq, id) { return id.toFactbase (); },
