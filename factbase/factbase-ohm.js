@@ -203,22 +203,23 @@ function make_semantics_Factbase (semantics) {
 		var result = [];
 		var id = idTree.toFactbase ();
 		var xywh = xywhTree.toFactbase ();
-		result.push (`fact ("rect", ${id}, true);`);
-		result.push (`fact ("rect_x", ${id}, ${xywh[0]});`);
-		result.push (`fact ("rect_y", ${id}, ${xywh[1]});`);
-		result.push (`fact ("rect_w", ${id}, ${xywh[2]});`);
-		result.push (`fact ("rect_h", ${id}, ${xywh[3]});`);
+		result.push (`fact ("rect", ${id}, _);`);
+		result.push (`fact ("rect-x", ${id}, ${xywh[0]});`);
+		result.push (`fact ("rect-y", ${id}, ${xywh[1]});`);
+		result.push (`fact ("rect-w", ${id}, ${xywh[2]});`);
+		result.push (`fact ("rect-h", ${id}, ${xywh[3]});`);
 		return result.join('\n'); 
 	    },
-	    // text returns an array[4] of fact strings
+	    // text returns an array[5] of fact strings
 	    text: function (_text, wss1, idTree, xyTree, _gt, wss2, chars, _endText, wss3) {
 		var result =[];
 		var id = idTree.toFactbase ();
 		var xy = xyTree.toFactbase ();
-		result.push (`fact ("text", ${id}, true);`);
-		result.push (`fact ("text_x", ${id}, ${xy[0]});`);
-		result.push (`fact ("text_y", ${id}, ${xy[1]});`);
-		result.push (`fact ("text_text", ${id}, "${chars.unitySVG().join('')}");`);
+		result.push (`fact ("text", ${id}, _);`);
+		result.push (`fact ("text-x", ${id}, ${xy[0]});`);
+		result.push (`fact ("text-y", ${id}, ${xy[1]});`);
+		result.push (`fact ("text-font", ${id}, 12);`);
+		result.push (`fact ("text-text", ${id}, "${chars.unitySVG().join('')}");`);
 		return result.join('\n'); 
 	    },
 	    id: function (_ideq, id) { return id.toFactbase (); },
