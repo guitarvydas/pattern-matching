@@ -7,10 +7,10 @@ Pattern {
 
   MainSection = "main" InferenceNameReference+
 
-  InferenceRule = "rule" InferenceNameDeclaration "match" MatchSection "infer" InferenceSection
+  InferenceRule = "rule" InferenceNameDeclaration "match" Match "infer" Inference
 
-  MatchSection =  Triple+
-  InferenceSection = Triple+
+  Match =  Triple+
+  Inference = Triple+
   WhereSection = "where" ForeignDeclaration+
 
   InferenceNameDeclaration = identifier
