@@ -792,36 +792,13 @@ fact ("text-text", functor0 ("id7"), functor0 ("FileSelector"));
 
 var _ = true;
 	  make_fb1();
-	  var g_old = goal (
-	      functor1 ("line", lvar("X")), 
-	  );
-	  var g_old_text = goal (
-	      functor2 ("text", lvar("X"), lvar ("Y")), 
-	  );
-	  var g_old_rect = goal (
-	      functor2 ("rect", lvar("ID"), _),
-	      functor2 ("rect-x", lvar ("ID"), lvar ("X") ),
-	      functor2 ("rect-y", lvar ("ID"), lvar ("Y") ),
-	      functor2 ("rect-w", lvar ("ID"), lvar ("W") ),
-	      functor2 ("rect-h", lvar ("ID"), lvar ("H") ),
-	  );
-	  var g_rect_hard_coded_constants = goal (
-	      functor2 ("rect", lvar("ID"), _),
-	      functor2 ("rect-x", lvar ("ID"), 40 ),
-	      functor2 ("rect-y", lvar ("ID"), 120 ),
-	      functor2 ("rect-w", lvar ("ID"), lvar ("W") ),
-	      functor2 ("rect-h", lvar ("ID"), lvar ("H") ),
-	  );
 	  var g = goal (
 	      functor2 ("rect", lvar("ID"), _),
-	      //functor2 ("rect-x", lvar ("ID"), 40 ),
 	      functor2 ("rect-x", lvar ("ID"), list ("@", "unity", 40)),
 	      functor2 ("rect-y", lvar ("ID"), 120 ),
 	      functor2 ("rect-w", lvar ("ID"), lvar ("W") ),
 	      functor2 ("rect-h", lvar ("ID"), lvar ("H") ),
 	  );
-	  //console.log(db.toString());
-	  //console.log(g.toString());
 	  var result = query (g);
 	  return result;
       }
