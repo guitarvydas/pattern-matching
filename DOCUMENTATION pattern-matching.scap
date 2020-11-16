@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ScappleDocument Version="1.1" ID="38C731A5-63A4-4E02-BC70-C049223DF876">
+    <Notes>
+        <Note ID="0" FontSize="12.0" Position="567.605469,347.464844" Width="54.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>match-js</String>
+            <ConnectedNoteIDs>2, 11</ConnectedNoteIDs>
+        </Note>
+        <Note ID="1" FontSize="12.0" Position="230.601562,222.265625" Width="99.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>pattern-matching</String>
+            <ConnectedNoteIDs>3-11</ConnectedNoteIDs>
+        </Note>
+        <Note ID="2" FontSize="12.0" Position="678.613281,363.871094" Width="245.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>interim POC ; write bounding-box detection manually (will be automated later)</String>
+            <ConnectedNoteIDs>0</ConnectedNoteIDs>
+        </Note>
+        <Note ID="3" FontSize="12.0" Position="361.304688,93.984375" Width="64.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>example 1</String>
+            <ConnectedNoteIDs>1, 13</ConnectedNoteIDs>
+        </Note>
+        <Note ID="4" FontSize="12.0" Position="360.304688,139.984375" Width="64.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>example 3</String>
+            <ConnectedNoteIDs>1, 15</ConnectedNoteIDs>
+        </Note>
+        <Note ID="5" FontSize="12.0" Position="360.304688,183.984375" Width="64.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>example 5</String>
+            <ConnectedNoteIDs>1, 18</ConnectedNoteIDs>
+        </Note>
+        <Note ID="6" FontSize="12.0" Position="359.304688,205.984375" Width="64.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>example 6</String>
+            <ConnectedNoteIDs>1, 19</ConnectedNoteIDs>
+        </Note>
+        <Note ID="7" FontSize="12.0" Position="360.304688,116.984375" Width="64.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>example 2</String>
+            <ConnectedNoteIDs>1, 14</ConnectedNoteIDs>
+        </Note>
+        <Note ID="8" FontSize="12.0" Position="359.304688,159.984375" Width="64.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>example 4</String>
+            <ConnectedNoteIDs>1, 17</ConnectedNoteIDs>
+        </Note>
+        <Note ID="9" FontSize="12.0" Position="442.925781,256.164062" Width="34.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>unity</String>
+            <ConnectedNoteIDs>1, 20</ConnectedNoteIDs>
+        </Note>
+        <Note ID="10" FontSize="12.0" Position="453.917969,282.019531" Width="54.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>factbase</String>
+            <ConnectedNoteIDs>1, 21</ConnectedNoteIDs>
+        </Note>
+        <Note ID="11" FontSize="12.0" Position="459.035156,318.816406" Width="94.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>bounding-boxes</String>
+            <ConnectedNoteIDs>0-1, 22</ConnectedNoteIDs>
+        </Note>
+        <Note ID="13" FontSize="12.0" Position="438.0,44.0" Width="193.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>match “a” ; js, ohm, cl-ccpre, esrap</String>
+            <ConnectedNoteIDs>3</ConnectedNoteIDs>
+        </Note>
+        <Note ID="14" FontSize="12.0" Position="469.0,97.0" Width="200.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>match “ab” ; js, ohm, cl-ccpre, esrap</String>
+            <ConnectedNoteIDs>7</ConnectedNoteIDs>
+        </Note>
+        <Note ID="15" FontSize="12.0" Position="466.28125,138.117188" Width="229.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>match “ab”, flip ; js, ohm, cl-ccpre, esrap</String>
+            <ConnectedNoteIDs>4</ConnectedNoteIDs>
+        </Note>
+        <Note ID="17" FontSize="12.0" Position="723.933594,161.113281" Width="423.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>match html ; ohm, esrap (skip REGEX versions, since it is not easy / do-able)</String>
+            <ConnectedNoteIDs>8</ConnectedNoteIDs>
+        </Note>
+        <Note ID="18" FontSize="12.0" Position="580.0,186.0" Width="374.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>match html ; ESRAP only - same as ../example4 with noise removed</String>
+            <ConnectedNoteIDs>5</ConnectedNoteIDs>
+        </Note>
+        <Note ID="19" FontSize="12.0" Position="580.0,214.0" Width="322.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>match html ; Ohm &amp; ESRAP ; parse, and transpile to JSON</String>
+            <ConnectedNoteIDs>6</ConnectedNoteIDs>
+        </Note>
+        <Note ID="20" FontSize="12.0" Position="685.8125,242.417969" Width="433.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>Ohm only ; SVG (subset) transpiled to SVG (unity transform - keeps spaces) </String>
+            <ConnectedNoteIDs>9</ConnectedNoteIDs>
+        </Note>
+        <Note ID="21" FontSize="12.0" Position="641.996094,267.023438" Width="498.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>Ohm only ; SVG (subset) transpiled to SVG + JS fact()s ; shows how to parse HTML and add it to the HTML as a factbase (JS &lt;script&gt; … &lt;/script&gt;)</String>
+            <ConnectedNoteIDs>10</ConnectedNoteIDs>
+        </Note>
+        <Note ID="22" FontSize="12.0" Position="635.703125,308.769531" Width="351.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>HTML transpiled to HTML ; calculate bounding boxes for rects and text, add them to the JS factbase script ; Ohm only</String>
+            <ConnectedNoteIDs>11</ConnectedNoteIDs>
+        </Note>
+    </Notes>
+    <BackgroundShapes></BackgroundShapes>
+    <Stacks>
+        <Stack>7, 4</Stack>
+        <Stack>18-19</Stack>
+    </Stacks>
+    <AutoFit>0-1, 3-11, 13-14, 19</AutoFit>
+    <NoteStyles>
+        <Style Name="Bubble (Blue)" ID="05A30106-FC93-4C2C-9566-6BF0D004AD2F" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.561855 0.71062 0.779401</BorderColor>
+            <FillColor>0.702319 0.888276 0.974252</FillColor>
+        </Style>
+        <Style Name="Bubble (Green)" ID="2914D4D3-8489-4437-87CF-927702F74044" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.572684 0.758969 0.558154</BorderColor>
+            <FillColor>0.715855 0.948712 0.697692</FillColor>
+        </Style>
+        <Style Name="Bubble (Pink)" ID="82FA9E7D-7A25-48B4-8C36-DBC7C179C147" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.794796 0.560965 0.58607</BorderColor>
+            <FillColor>0.957566 0.766747 0.999616</FillColor>
+        </Style>
+        <Style Name="Bubble (Red)" ID="5E4585EB-1497-4655-AE65-1B960E95F5E1" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.794796 0.560965 0.58607</BorderColor>
+            <FillColor>0.993495 0.701207 0.732587</FillColor>
+        </Style>
+        <Style Name="Bubble (Yellow)" ID="4012FE7F-D001-46CD-9796-48A61868F5C3" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.798177 0.714184 0.522055</BorderColor>
+            <FillColor>0.997722 0.89273 0.652569</FillColor>
+        </Style>
+        <Style Name="Red Text" ID="9AFD2EF1-868B-4DB6-95F4-C3EFB6659D05" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="Yes" AffectNoteBody="No" AffectFade="No">
+            <TextColor>0.985948 0.0 0.026951</TextColor>
+        </Style>
+        <Style Name="Title Text" ID="3ED8E95B-60F4-43E4-A975-87C5F3E10605" AffectFontStyle="Yes" AffectAlignment="Yes" AffectTextColor="No" AffectNoteBody="No" AffectFade="No">
+            <FontSize>28.0</FontSize>
+            <IsBold>Yes</IsBold>
+        </Style>
+    </NoteStyles>
+    <UISettings>
+        <BackgroundColor>0.999767 0.98837 0.949907</BackgroundColor>
+        <DefaultFont>Helvetica</DefaultFont>
+    </UISettings>
+    <PrintSettings PaperSize="612.0,792.0" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="na-letter" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
+</ScappleDocument>
