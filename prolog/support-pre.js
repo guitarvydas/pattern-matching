@@ -223,7 +223,7 @@ function null_Q_(x) {
     } else if (x.isPair) {
 	return false;
     } else {
-	return false;
+	throw "null_Q_ not given a list()"
     }
 }
 
@@ -275,119 +275,13 @@ function display(x) {
     }
 }
 
-/////// tests /////
-/*
-console.log("\ntesting cons...");
-let x = cons(1,cons(2,cons(3,cons(4,cons(5,cons(6,"nil"))))));
-console.log(x);
-console.log(car(x));
-console.log(cadr(x));
-console.log(caddr(x));
-console.log(cadddr(x));
-console.log(caddddr(x));
-console.log(cdr(cdddddr(x)));
 
-console.log("\ntesting list...");
-let y = list(1,2,3,4,5,6);
-console.log(y);
-console.log(car(y));
-console.log(cadr(y));
-console.log(caddr(y));
-console.log(cadddr(y));
-console.log(caddddr(y));
-console.log(cdr(cdddddr(y)));
-
-console.log();
-
-console.log("\ntesting eq_Q_...");
-console.log(eq_Q_("nil","nil")); // should be true
-console.log(eq_Q_(1,1));       // should be true
-console.log(eq_Q_(true,true)); // should be true
-console.log(eq_Q_(false,false)); // should be true
-console.log(eq_Q_("abc","abc")); // should be false in Scheme, but isn't in JS
-var s = "abc";
-console.log(eq_Q_(s,s));  // should be true
-var s2 = "abc";
-console.log(eq_Q_(s,s2));  // should be false in Schem, but isn't in JS
-
-console.log(eq_Q_(x,y));  // should be false
-console.log(eq_Q_(x,x));  // should be true
-
-console.log();
-console.log(typeof(x));
-
-console.log("\ntesting pair_Q_...");
-console.log();
-var a = "nil";
-var b = cons("b",a);
-var c = cons("b","nil");
-var d = cons();
-
-console.log(a);
-console.log(b);
-console.log(c);
-console.log(d);
-console.log(pair_Q_(a));
-console.log(pair_Q_(b));
-console.log(pair_Q_(c));
-console.log(pair_Q_(d));
-console.log(pair_Q_("abc"));
-console.log(pair_Q_(42));
-*/
-
-function testToDebug() {
-    console.log("\ntesting toDebug...");
-    
-    console.log("a");
-    let lis = list(1,2,3,list(4,5));
-    console.log("b");
-    let lis2 = "nil";
-    console.log("c");
-    console.log(toDebug(null));
-    console.log("cc");
-    console.log(cons(1,"nil").toString());
-    console.log("ccc");
-    console.log(list(1).toString());
-    console.log("cccc");
-    console.log(toDebug(lis));
-    console.log("d");
-    //console.log(toDebug(lis2));
-    console.log("e");
-    
-    console.log();
-    console.log();
+function error (x,y) {
+    console.log ();
+    console.log ("fatal error");
+    console.log ("...");
+    console.log (x);
+    console.log (y);
+    console.log ("...");
+    throw 'fatal error occurred while running prolog.js';
 }
-
-function testStrings () {
-    
-    console.log("\ntesting strings...");
-    let lll = list("r!","nil");  // should return ("r!" null)
-    console.log (lll.toString());
-    console.log (car(lll));
-    console.log (cadr(lll));  // crashes if lll is not ("r1" null)
-}
-function testDotted() {
-    let ddd = cons(1,2);
-    console.log("\ntesting dotted pair");
-    console.log(ddd.toString());
-    let lll = cons(8,9);
-    console.log(lll.toString());
-    let cc = list(10);
-    console.log(cc.toString());
-    let ccc = list(12,13);
-    console.log(ccc.toString());
-    let lccc = list(14,15,ddd);
-    console.log(lccc.toString());
-    let cccl = list(list(16,17));
-    console.log(cccl.toString());
-    let lld = list(cons(18,19));
-    console.log(lld.toString());
-    let ld = cons(20,cons(21,22));
-    console.log(ld.toString());
-}
-
-//testToDebug();
-//testStrings();
-//testDotted();
-//    console.log();
-//    console.log();

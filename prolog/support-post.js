@@ -36,4 +36,3 @@ var head = list;
 var body = list;
 var goal = list;
 
-      function execQuery () {
