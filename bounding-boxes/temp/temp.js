@@ -665,6 +665,7 @@ var body = list;
 var goal = list;
 
 var fact = fact2;
+var factQ = list;
 var _ = true;
 
 
@@ -724,17 +725,17 @@ function execQuery () {
     var _ = true;
     make_fb1();
     var g = goal (
-	functor2 ("rect", lvar ("ID") , _),
-	functor2 ("rect-x", lvar ("ID"), lvar ("X") ),
-	functor2 ("rect-y", lvar ("ID"), lvar ("Y") ),
-	functor2 ("rect-w", lvar ("ID"), lvar ("W") ),
-	functor2 ("rect-h", lvar ("ID"), lvar ("H") ),
-	functor2 ("@", "newFact", "bb-left", lvar ("X")),
-	functor2 ("@", "addInRegister", lvar ("X"), lvar ("W")), 
-	functor2 ("@", "newFactFromRegister", "bb-right"),
-	functor2 ("@", "newFact", "bb-top", lvar ("Y")),
-	functor2 ("@", "addInRegister", lvar ("Y"), lvar ("H")), 
-	functor2 ("@", "newFactFromRegister", "bb-bottom"),
+	factQ ("rect", lvar ("ID") , _),
+	factQ ("rect-x", lvar ("ID"), lvar ("X") ),
+	factQ ("rect-y", lvar ("ID"), lvar ("Y") ),
+	factQ ("rect-w", lvar ("ID"), lvar ("W") ),
+	factQ ("rect-h", lvar ("ID"), lvar ("H") ),
+	factQ ("@", "newFact", "bb-left", lvar ("X")),
+	factQ ("@", "addInRegister", lvar ("X"), lvar ("W")), 
+	factQ ("@", "newFactFromRegister", "bb-right"),
+	factQ ("@", "newFact", "bb-top", lvar ("Y")),
+	factQ ("@", "addInRegister", lvar ("Y"), lvar ("H")), 
+	factQ ("@", "newFactFromRegister", "bb-bottom"),
     );
     var result = query (g);
     return result;
