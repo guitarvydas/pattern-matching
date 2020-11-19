@@ -143,7 +143,85 @@ const result = ohmParser.match (text);
 if (result.succeeded ()) {
     console.log ("Ohm matching succeeded");
     var semantics = ohmParser.createSemantics ();
+    addUnity (semantics);
+    console.log (semantics (result).unity ());
 } else {
     console.log ("Ohm matching failed");
 }
 
+function addUnity (semantics) {
+    semantics.addOperation (
+	'unity',
+	{
+            html: function (ws_plural, htmlElement, headerStuff,bodyElement,bodyStuff,factbase,bodyElementEnd,htmlEnd) {
+		return ws_plural.unity ().join ('') + 
+		    htmlElement.unity () + 
+		    headerStuff.unity () +
+		    bodyElement.unity () +
+		    bodyStuff.unity () +
+		    factbase.unity () +
+		    bodyElementEnd.unity () +
+		    htmlEnd.unity ();
+	    },
+	    htmlElement: function (_html,ws_plural) { return "<html>" + ws_plural.unity ().join (''); },
+	    headerStuff: function (notBody_plural) { return notBody_plural.unity ().join (''); },
+	    notBody: function (any) { return any.unity (); },
+	    bodyElement: function (_body,ws_plural) {
+		return "<body>" + ws_plural.unity ().join ('');
+	    },
+	    bodyStuff: function (any_plural) {
+		return any_plural.unity ().join ('');
+	    },
+
+	    factbase: function (_script,ws1_plural,fact_plural,_slashScript,ws2_plural) {
+		return "<script>" +
+		    ws1_plural.unity ().join ('') +
+		    fact_plural.unity ().join ('') +
+		    "</script>" +
+		    ws2_plural.unity ().join ('');
+	    },
+	    fact: function (_fact,ws1_plural,_lpar,str,_comma1,ws2_plural,subject,_comma2,ws3_plural,object,_rparSemiColon,ws4_plural) {
+		return "fact" + 
+		    ws1_plural.unity ().join ('') +
+		    "(" +
+		    str.unity () +
+		    "," +
+		    ws2_plural.unity ().join ('') +
+		    subject.unity () +
+		    "," +
+		    ws3_plural.unity ().join ('') +
+		    object.unity () +
+		    ");" +
+		    ws4_plural.unity ().join ('');
+	},
+	    subject: function (_functor0,ws1_plural,_lpar,str,ws2_plural,_rpar,ws3_plural) {
+		return "functor0" +
+		    ws1_plural.unity ().join ('') +
+		    "(" +
+		    str.unity () +
+		    ws2_plural.unity ().join ('') +
+		    ")" +
+		    ws3_plural.unity ().join ('');
+	    },
+	    object: function (_functor0,ws1_plural,_lpar,strOrIntegerOrUnderscore,ws2_plural,_rpar,ws3_plural) {
+		return "functor0" +
+		    ws1_plural.unity ().join ('') +
+		    "(" +
+		    strOrIntegerOrUnderscore.unity () +
+		    ws2_plural.unity ().join ('') +
+		    ")" +
+		    ws3_plural.unity ().join ('');
+	    },
+
+	    bodyElementEnd: function (_slashBody,ws_plural) {return "</body>" + ws_plural.unity ().join (''); },
+	    htmlEnd: function (_slashHTML,ws_plural) { return "</html>" + ws_plural.unity ().join (''); },
+	    ws: function (c) { return c.unity (); },
+
+	    string: function (_dq1, notDQuote_plural, _dq2) { return '"' + notDQuote_plural.unity ().join ('') + '"'},
+	    notDQuote: function (any) { return any.unity (); },
+
+	    integer: function (digit_plural) { return digit_plural.unity ().join (''); },
+
+	    _terminal: function() { return this.primitiveValue; }
+	});
+}
