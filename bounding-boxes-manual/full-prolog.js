@@ -350,13 +350,6 @@ function back6(l,g,r,e,n,c,whole_db) {
     })();
 };
 function prove6(l,g,r,e,n,c,whole_db) {
-    console.log ("prove6");
-    console.log ("g:");
-    console.log (g.toString ());
-    console.log ("r:");
-    console.log (r.toString ());
-    console.log ();
-    throw "xxx";
     return (function(){
 	if (null_Q_(g)) {
 	    (function(next_result=print_frame(e)) {

@@ -351,14 +351,11 @@ function back6(l,g,r,e,n,c,whole_db) {
 };
 function prove6(l,g,r,e,n,c,whole_db) {
     console.log ("prove6");
-    console.log ("g:");
     console.log (g.toString ());
-    console.log ("r:");
-    console.log (r.toString ());
-    console.log ();
-    throw "xxx";
+    console.log (.toString ());
     return (function(){
 	if (null_Q_(g)) {
+console.log(300);
 	    (function(next_result=print_frame(e)) {
 		return append_to_result(next_result);
 
@@ -366,13 +363,16 @@ function prove6(l,g,r,e,n,c,whole_db) {
 	    return back6(l,g,r,e,n,c,whole_db);
 
 	} else if (eq_Q_("!",car(g))) {
+console.log(301);
 	    clear_r(c);
 	    return prove6(c,cdr(g),r,e,n,c,whole_db);
 
 	} else if (eq_Q_("r!",car(g))) {
+console.log(302);
 	    return prove6(l,cddr(g),r,e,n,cadr(g),whole_db);
 
 	} else if (null_Q_(r)) {
+console.log(303);
 	    return (function(){
 		if (null_Q_(l)) {
 		    return true;
@@ -382,16 +382,23 @@ function prove6(l,g,r,e,n,c,whole_db) {
 	    })();
 
 	} else if (foreign_Q_(car(g))) {
+console.log(304);
 	    call_foreign(car(g),e);
 	    return prove6(l,cdr(g),r,e,n,c,whole_db);
 
 	} else if (foreign_Q_(car(r))) {
+console.log(305);
 	    call_foreign(car(r),e);
 	    return prove6(l,g,cdr(r),e,n,c,whole_db);
 
 	}else {
+console.log(306);
 	    return (function(a=copy(car(r),n)) {
+		console.log(a.toString ());
+		console.log(car(a).toString ());
+		console.log(car(g).toString ());
 		return (function(e_A_=unify(car(a),car(g),e)) {
+		    console.log(e_A_.toString () );
 		    return (function(){
 			if (e_A_) {
 			    return prove6(link(l,g,r,e,n,c),AppendInefficient3(cdr(a),list("r!",l),cdr(g)),whole_db,e_A_,_plus(1,n),l,whole_db);
@@ -614,6 +621,7 @@ function call_foreign(expr,bindings) {
 // <hack>
 	    } else if (string_EQ_Q_ ("newFact", func)) {
 		var resolved_args=resolveArgs(args,bindings);
+		console.log ("calling newFact");
 		return newFact(resolved_args);
 // </hack>
 
@@ -651,8 +659,13 @@ function cut () { return "!"; };
 function fail () { return "fail"; };
 ////
 function query (goal) {
+    console.log ("query");
+    console.log (goal.toString ());
     prove6 (list (), goal, db, empty, 1, list (), db);
     var r = get_result ();
+    console.log ("query result:");
+    console.log (r.toString ());
+    console.log ();
     return r;
 }
 
