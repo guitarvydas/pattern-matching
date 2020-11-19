@@ -110,7 +110,7 @@
                 <Fill>0.751293 0.937828 0.984417</Fill>
             </Appearance>
             <String>bounding-boxes</String>
-            <ConnectedNoteIDs>1, 22, 25, 33</ConnectedNoteIDs>
+            <ConnectedNoteIDs>1, 22, 25-28, 33</ConnectedNoteIDs>
         </Note>
         <Note ID="13" FontSize="12.0" Position="438.0,44.0" Width="193.0">
             <Appearance>
@@ -217,23 +217,23 @@
                 <FormatRange Struckthrough="Yes">0,21</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="25" FontSize="12.0" Position="571.296875,481.851562" Width="245.0">
+        <Note ID="25" FontSize="12.0" Position="759.773438,409.601562" Width="184.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1">0.794796 0.560965 0.58607</Border>
-                <Fill>0.957566 0.766747 0.999616</Fill>
+                <Border Weight="1">0.561855 0.71062 0.779401</Border>
+                <Fill>0.702319 0.888276 0.974252</Fill>
             </Appearance>
             <String>0. make a grammar that accepts HTML+SVG + factbase</String>
-            <ConnectedNoteIDs>11, 26-28</ConnectedNoteIDs>
+            <ConnectedNoteIDs>11, 35</ConnectedNoteIDs>
         </Note>
-        <Note ID="26" FontSize="12.0" Position="862.0,522.0" Width="159.0">
+        <Note ID="26" FontSize="12.0" Position="823.074219,457.71875" Width="159.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1">0.794796 0.560965 0.58607</Border>
-                <Fill>0.993495 0.701207 0.732587</Fill>
+                <Border Weight="1">0.561855 0.71062 0.779401</Border>
+                <Fill>0.702319 0.888276 0.974252</Fill>
             </Appearance>
             <String>1. make an internal factbase</String>
-            <ConnectedNoteIDs>25</ConnectedNoteIDs>
+            <ConnectedNoteIDs>11, 36</ConnectedNoteIDs>
         </Note>
         <Note ID="27" FontSize="12.0" Position="853.261719,557.128906" Width="200.0">
             <Appearance>
@@ -242,7 +242,7 @@
                 <Fill>0.993495 0.701207 0.732587</Fill>
             </Appearance>
             <String>2. spit out HTML+SVG+augmented factbase</String>
-            <ConnectedNoteIDs>25</ConnectedNoteIDs>
+            <ConnectedNoteIDs>11</ConnectedNoteIDs>
         </Note>
         <Note ID="28" FontSize="12.0" Position="843.800781,616.035156" Width="200.0">
             <Appearance>
@@ -251,7 +251,7 @@
                 <Fill>0.993495 0.701207 0.732587</Fill>
             </Appearance>
             <String>3. add bouding-box calculator ; make it use the read-in factbase ; spit out augmented factbase</String>
-            <ConnectedNoteIDs>25, 32</ConnectedNoteIDs>
+            <ConnectedNoteIDs>11, 32</ConnectedNoteIDs>
         </Note>
         <Note ID="29" FontSize="12.0" Position="337.0,370.0" Width="186.0">
             <Appearance>
@@ -298,13 +298,31 @@
             <String>manually detect bounding boxes and use foreign to create facts</String>
             <ConnectedNoteIDs>0</ConnectedNoteIDs>
         </Note>
+        <Note ID="35" FontSize="12.0" Position="1027.0,418.0" Width="115.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>…/htmlscgfb-ohm.js</String>
+            <ConnectedNoteIDs>25</ConnectedNoteIDs>
+        </Note>
+        <Note ID="36" FontSize="12.0" Position="1034.0,461.0" Width="113.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>…/internalfb-ohm.js</String>
+            <ConnectedNoteIDs>26</ConnectedNoteIDs>
+        </Note>
     </Notes>
     <BackgroundShapes></BackgroundShapes>
     <Stacks>
         <Stack>7, 4</Stack>
         <Stack>18-19</Stack>
     </Stacks>
-    <AutoFit>0-1, 3-11, 13-14, 19, 24, 26, 29-30, 32-33</AutoFit>
+    <AutoFit>0-1, 3-11, 13-14, 19, 24, 26, 29-30, 32-33, 35-36</AutoFit>
     <NoteStyles>
         <Style Name="Bubble (Blue)" ID="05A30106-FC93-4C2C-9566-6BF0D004AD2F" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>
