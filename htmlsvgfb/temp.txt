@@ -1,0 +1,22 @@
+htmlsvgfbUnity {
+    html = ws* htmlElement headerStuff bodyElement bodyStuff factbase bodyElementEnd htmlEnd
+    htmlElement = "<html>" ws*
+    headerStuff = notBody*
+    notBody = ~"<body>" any
+    bodyElement = "<body>" ws*
+    bodyStuff = (~"<script>" any)*
+
+    factbase = "<script>" ws* fact+ "</script>" ws*
+    fact = "fact" ws* "(" string "," ws* subject "," ws* object ");" ws*
+    subject = "functor0" ws* "(" string ws* ")" ws*
+    object = "functor0" ws* "(" (string | integer | "_") ws* ")" ws*
+
+    bodyElementEnd = "</body>" ws*
+    htmlEnd = "</html>" ws*
+    ws = " " | "\\t" | "\\n"
+
+    string = "\\"" notDQuote* "\\""
+    notDQuote = ~"\\"" any
+
+    integer = ("0".."9")+
+}
