@@ -33,15 +33,6 @@ const text = `
 </html>
 `;
 
-const tokenizerGrammar = `
-tokens {
-    tokens = basicToken+
-    basicToken = newline | character
-    newline = "\\n"
-    character = any
-}
-`;
-
 
 const ohm = require ('ohm-js');
 
@@ -50,7 +41,15 @@ function makeToken (kind, s, line, column) {
 };
 
 function basicParse () {
-    const parser = ohm.grammar (tokenizerGrammar);
+    const grammar = `
+      tokens {
+	  tokens = basicToken+
+	  basicToken = newline | character
+	  newline = "\\n"
+	  character = any
+      }
+      `;
+    const parser = ohm.grammar (grammar);
     const result = parser.match (text);
     var lineNumber;
     var columnNumber;
