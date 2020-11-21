@@ -47,16 +47,16 @@ const ohm = require ('ohm-js');
 const ohmParser = ohm.grammar (tokenizerGrammar);
 const result = ohmParser.match (text);
 var lineNumber;
-var column;
+var columnNumber;
 
 function makeToken (kind, s) {
-    return `token ${kind} ${s}\n`;
+    return `token ${kind} ${s} ${lineNumber} ${columnNumber}\n`;
 }
 
 if (result.succeeded ()) {
     console.log ("Ohm matching succeeded");
     lineNumber = 1;
-    column = 1;
+    columnNumber = 1;
     var semantics = ohmParser.createSemantics ();
     addTokenizer (semantics);
     console.log ('tokenized:');
@@ -72,16 +72,17 @@ function addTokenizer (semantics) {
 	    tokens: function (token_plural) { return token_plural.tokenize ().join ('');},
 	    basicToken: function (b) { return b.tokenize (); },
 	    newline: function (nl) { 
-		column += 1;
-		var result = makeToken ("basic", "newline");
+		columnNumber += 1;
+		var result = makeToken ("basic", "\n");
 		lineNumber += 1;
-		column = 1;
+		columnNumber = 1;
 		return result;
 	    },
 	    character: function (c) { 
-		column += 1;
+		columnNumber += 1;
 		var result = makeToken ("basic", c.tokenize ());
 		return result;
 	    },
    	    _terminal: function() { return this.primitiveValue; }
 	});};
+
