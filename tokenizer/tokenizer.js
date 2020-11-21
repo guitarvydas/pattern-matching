@@ -33,45 +33,55 @@ const text = `
 </html>
 `;
 
-const tokenGrammar = `
+const tokenizerGrammar = `
 tokens {
-    tokens = token+
-    token = commentToken | ws | stringToken | symbolToken | integerToken
-    commentToken = "//" (~"\\n" any)*
-    ws = " " | "\\t" | newline
+    tokens = basicToken+
+    basicToken = newline | character
     newline = "\\n"
-    stringToken = stringDelimiter (~"\\"" any)* stringDelimiter
-    symbolToken = (~ws ~stringDelimiter any)+
-    integerToken = ("0" .. "9")+
-    stringDelimiter = "\\""
+    character = any
 }
 `;
 
 
 const ohm = require ('ohm-js');
-const ohmParser = ohm.grammar (tokenGrammar);
+const ohmParser = ohm.grammar (tokenizerGrammar);
 const result = ohmParser.match (text);
+var lineNumber;
+var column;
+
+function makeToken (kind, s) {
+    return `token ${kind} ${s}\n`;
+}
 
 if (result.succeeded ()) {
     console.log ("Ohm matching succeeded");
+    lineNumber = 1;
+    column = 1;
     var semantics = ohmParser.createSemantics ();
-    addTokenize (semantics);
+    addTokenizer (semantics);
+    console.log ('tokenized:');
+    console.log (semantics (result).tokenize ());
 } else {
     console.log ("Ohm matching failed");
 }
 
-function addTokenize (semantics) {
+function addTokenizer (semantics) {
     semantics.addOperation (
 	'tokenize',
 	{
-	    tokens: function (token_plural) {},
-	    token: function (token) {},
-	    commentToken: function (_slashslash, any_plural) {},
-	    ws: function (c) {},
-	    newline: function (nl) {},
-	    stringToken: function (_delim1, any_plural, _delim2) {},
-	    symbolToken: function (any_plural) {},
-	    integerToken: function (digit_plural) {},
-	    stringDelimiter: function (_delim) {},
+	    tokens: function (token_plural) { return token_plural.tokenize ().join ('');},
+	    basicToken: function (b) { return b.tokenize (); },
+	    newline: function (nl) { 
+		column += 1;
+		var result = makeToken ("basic", "newline");
+		lineNumber += 1;
+		column = 1;
+		return result;
+	    },
+	    character: function (c) { 
+		column += 1;
+		var result = makeToken ("basic", c.tokenize ());
+		return result;
+	    },
    	    _terminal: function() { return this.primitiveValue; }
 	});};
