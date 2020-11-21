@@ -40,53 +40,33 @@ function makeToken (kind, s, line, column) {
     return `token ${kind} '${s}' ${line} ${column}\n`;
 };
 
-function basicParse () {
-    const grammar = `
-      tokens {
-	  tokens = basicToken+
-	  basicToken = newline | character
-	  newline = "\\n"
-	  character = any
-      }
-      `;
+function tokenParse (grammar, semanticsName, semanticsFunctions) {
     const parser = ohm.grammar (grammar);
     const result = parser.match (text);
     var lineNumber;
     var columnNumber;
     
     if (result.succeeded ()) {
-	console.log ("Ohm matching succeeded");
+	console.log ("parse succeeded");
 	lineNumber = 1;
 	columnNumber = 1;
-	var semantics = parser.createSemantics ();
-	addTokenizer (semantics);
-	basicParse = semantics (result).tokenize ();
-	return basicParse;
+	if (undefined != semanticsFunctions) {
+	    var semantics = parser.createSemantics ();
+	    semantics.addOperation (semanticsName, semanticsFunctions);
+	    var p = semantics (result).tokenize ();
+	    return p;
+	}
     } else {
-	console.log ("Ohm matching failed");
-    }
-
-    function addTokenizer (semantics) {
-	semantics.addOperation (
-	    'tokenize',
-	    {
-		tokens: function (token_plural) { return token_plural.tokenize ().join ('');},
-		basicToken: function (b) { return b.tokenize (); },
-		newline: function (nl) { 
-		    columnNumber += 1;
-		    var result = makeToken ("basic", "\n", lineNumber, columnNumber);
-		    lineNumber += 1;
-		    columnNumber = 1;
-		    return result;
-		},
-		character: function (c) { 
-		    columnNumber += 1;
-		    var result = makeToken ("basic", c.tokenize (), lineNumber, columnNumber);
-		    return result;
-		},
-   		_terminal: function() { return this.primitiveValue; }
-	    });
+	console.log ("parse failed");
     }
 }
 
-console.log (basicParse ());
+
+tokenParse (
+    `tokens {
+	tokens = basicToken+
+	basicToken = newline | character
+	newline = "\\n"
+	character = any
+    }`
+);
