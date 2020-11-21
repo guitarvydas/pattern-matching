@@ -71,6 +71,10 @@ function tokenParser (grammar, semanticsName, semanticsFunctions) {
     }
 }
 
+function stringify (tokenArray) {
+    return tokenArray.map ( token => JSON.stringify (token) );
+};
+
 const basicGrammar =
     `tokens {
 	tokens = basicToken+
@@ -80,8 +84,10 @@ const basicGrammar =
     }`;
 
 const basicSemantics = {
-    tokens: function (token_plural) { return token_plural.tokenize ().join ('\n');},
-    basicToken: function (b) { return JSON.stringify (b.tokenize ()); },
+    tokens: function (token_plural) { 
+	return stringify (token_plural.tokenize ());
+    },
+    basicToken: function (b) { return b.tokenize (); },
     newline: function (nl) {
 	var result = makeToken ("basic", "\n", basicLineNumber, basicColumnNumber);
 	basicLineNumber += 1;
@@ -97,9 +103,10 @@ const basicSemantics = {
 };
 
 const commentGrammar =
-  `comments {
+  `
+   comments {
      Tokens = (CommentToken | BasicToken)+
-     BasicToken = "{" BasicKind "," "text" ":" char "," Line "," Column "}"
+     BasicToken = "{" BasicKind "," Text "," Line "," Column "}"
      CommentToken = SlashSlashToken AnyTokenExceptNewline*
        SlashSlashToken = FirstSlashToken SlashToken 
        NewlineToken = "{" BasicKind "," newlineChar "," Line "," Column "}"
@@ -107,46 +114,87 @@ const commentGrammar =
        SlashToken = "{" BasicKind "," slashChar "," Line "," Column "}"
        AnyTokenExceptNewline = ~NewlineToken BasicTokenChar
        BasicTokenChar = "{" BasicKind "," char "," Line "," Column "}"
-     BasicKind ="kind" ":" "basic"
-     Line = "line" ":" integer
-     Column = "column" ":" integer
+     BasicKind = quote "token" quote ":" quote "basic" quote
+     Line = quote "line" quote ":" integer
+     Column = quote "column" quote ":" integer
 
+     quote = "\\""
+     Text = quote "text" quote ":" char
+     
      integer = num+
      num = "0" .. "9"
-     char = "'" any "'"
-     newlineChar = "text" ":" "'" "\\n" "'"
-     slashChar = "text" ":" "'" "/" "'"
-  }`;
+     char = quote (escapedChar | simpleChar) quote
+     escapedChar = "\\\\" any
+     simpleChar = any
+     newlineChar = quote "text" quote ":" "'" "\\n" "'"
+     slashChar = quote "text" quote ":" quote "/" quote
+   }
+`;
 
 const commentSemantics = {
-    Tokens: function (token_plural) { return token_plural.comment ().join (''); },
-    CommentToken: function (slashSlashToken, anyTokenExceptNewline_plural) {
-	var position = slashSlashToken.comment ();
-	var text = anyTokenExceptNewline_plural.comment ().join ('');
-	return `token comment '${text}' ${position.line} ${position.column}\n`;
+    Tokens: function (token_plural) {
+	return token_plural.comment ().join (''); 
     },
-    NewlineToken: function (_token, _basic, _newlineChar, line, column) { return ""; },
+    CommentToken: function (slashSlashToken, anyTokenExceptNewline_plural) {
+	var first = slashSlashToken.comment ();
+	var text = anyTokenExceptNewline_plural.comment ().join ('');
+	return { "token" : "comment", "text" : text, "line" : first.line (), "column" : first.column };
+    },
+    NewlineToken: function (_lbrace, basicKind, _comma1, _newlineChar, _comma2, line, _comma3, column, _rbrace) { 
+	return { 
+	    'token' : basicKind.comment (),
+	    'text' : "\n",
+	    'line' : line.comment (),
+	    'column' : column.comment ()
+	}
+    },
     SlashSlashToken: function (firstSlash, _slash) {
 	return firstSlash.comment ();
     },
-    BasicToken: function (_token, _basic, c, line, column) { 
-	return `token basic '${c.comment ()}' ${line.comment ()} ${column.comment ()}\n`;
+    BasicToken: function (_lbrace, basicKind, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
+	return {
+	    'token' : basicKind.comment (),
+	    'text' : c.comment (),
+	    'line' : line.comment (),
+	    'column' : column.comment ()
+	}
     },
-    BasicTokenChar: function (_token, _basic, c, line, column) { 
-	return c.comment ();
+    BasicTokenChar: function (_lbrace, basicKind, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
+	return {
+	    'token' : basicKind.comment (),
+	    'text' : c.comment (),
+	    'line' : line.comment (),
+	    'column' : column.comment ()
+	}
     },
-    FirstSlashToken: function (_token, _basic, _slash, line, column) {
-	return { 'line': line.comment (), 'column': column.comment () };
+    FirstSlashToken: function (_lbrace, basicKind, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
+	return {
+	    'token' : basicKind.comment (),
+	    'text' : "/",
+	    'line' : line.comment (),
+	    'column' : column.comment ()
+	}
     },
-    SlashToken: function (_token, _basic, _slash, _line, _column) { return ""; },
+    SlashToken: function (_lbrace, basicKind, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
+	return {
+	    'token' : basicKind.comment (),
+	    'text' : "/",
+	    'line' : line.comment (),
+	    'column' : column.comment ()
+	}
+    },
     AnyTokenExceptNewline: function (basicToken) { return basicToken.comment (); },
-    Line: function (integer) { return integer.comment (); },
-    Column: function (integer) { return integer.comment (); },
+    Line: function (_q1, _line, _q2, _colon, integer) { return integer.comment (); },
+    Column: function (_q1, _column, _q2, _colon, integer) { return integer.comment (); },
+
     integer: function (num_plural) { return parseInt (num_plural.comment ().join ('')); },
     num: function (n) { return n.comment (); },
     char: function (_q1, c, _q2) { return c.comment (); },
-    newlineChar: function (_q1, _c, _q2) { return "\n"; },
-    slashChar: function (_q1, _slash, _q2) { return "/"; },
+    Text: function (_q1, _text, _q2, _colon, c) { return c.comment (); },
+    BasicKind: function (_q1, _kind, _q2, _colon, _q3, _basic, _q4) { return "basic"; },
+    newlineChar: function (_q1, _text, _q2, _colon, _q3, _newline, _q4) { return "\n"; },
+    slashChar: function (_q1, _text, _q2, _colon, _q3, _slash, _q4) { return "/"; },
+
     _terminal: function() { return this.primitiveValue; }
 };
 
@@ -233,16 +281,19 @@ var p1 = new tokenParser ( basicGrammar, 'tokenize', basicSemantics );
 var p2 = new tokenParser ( commentGrammar, 'comment', commentSemantics );
 var p3 = new tokenParser ( stringGrammar, 'string', stringSemantics );
 
+console.log ("1:");
 console.log (
 	p1.parse ("a\n//comment\ndef\n")
 	//p1.parse ("a")
 );
+console.log ("2:");
 console.log (
     p2.parse (
 	//p1.parse ("a\n//comment\ndef\n")
 	p1.parse ("a")
     )
 );
+console.log ("3:");
 console.log (
     p3.parse (
 	p2.parse (
