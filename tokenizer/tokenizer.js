@@ -68,5 +68,23 @@ tokenParse (
 	basicToken = newline | character
 	newline = "\\n"
 	character = any
-    }`
+    }`,
+    'tokenize',
+    {
+	tokens: function (token_plural) { return token_plural.tokenize ().join ('');},
+	basicToken: function (b) { return b.tokenize (); },
+	newline: function (nl) { 
+	    this.columnNumber += 1;
+	    var result = makeToken ("basic", "\n", this.lineNumber, this.columnNumber);
+	    this.lineNumber += 1;
+	    this.columnNumber = 1;
+	    return result;
+	},
+	character: function (c) { 
+	    this.columnNumber += 1;
+	    var result = makeToken ("basic", c.tokenize (), this.lineNumber, this.columnNumber);
+	    return result;
+	},
+   	_terminal: function() { return this.primitiveValue; }
+    }    
 );
