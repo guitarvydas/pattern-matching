@@ -148,13 +148,37 @@ const commentSemantics = {
     _terminal: function() { return this.primitiveValue; }
 };
 
+const stringGrammar =
+  `comments {
+     Tokens = (Token)+
+     Token = "token" Kind text Line Column
+     Kind = Identifier
+     Line = integer
+     Column = integer
+
+     Identifier = firstChar followChar*
+     FirstCharToken = "token" Kind firstChar Line Column
+     FollowCharToken = "token" Kind followChar Line Column
+     firstChar = "A" .. "Z" | "a" .. "z"
+     followChar = "0".."9" | "-" | "_" | firstChar
+     integer = num+
+     num = "0" .. "9"
+     char = "'" any "'"
+     newlineChar = "'" "\\n" "'"
+     slashChar = "'" "/" "'"
+     text = "'" (~"'" any)* "'"
+  }`;
+
+
 var p1 = new tokenParser ( basicGrammar, 'tokenize', basicSemantics );
-//var p2 = new tokenParser ( commentGrammar );
 var p2 = new tokenParser ( commentGrammar, 'comment', commentSemantics );
+var p3 = new tokenParser ( stringGrammar );
 
 console.log (
-    p2.parse (
-	p1.parse ("a\n//comment\ndef\n")
+    p3.parse (
+	p2.parse (
+	    p1.parse ("a\n//comment\ndef\n")
+	)
     )
 );
 
