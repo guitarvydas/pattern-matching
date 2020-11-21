@@ -42,6 +42,8 @@ function makeToken (kind, s, line, column) {
 
 var columnNumber;
 var lineNumber;
+var basicColumnNumber;
+var basicLineNumber;
 
 function tokenParser (grammar, semanticsName, semanticsFunctions) {
     this.semanticsName = semanticsName;
@@ -52,12 +54,12 @@ function tokenParser (grammar, semanticsName, semanticsFunctions) {
 	this.result = this.parser.match (text);
 	
 	if (this.result.succeeded ()) {
-	    lineNumber = 1;
-	    columnNumber = 1;
+	    basicLineNumber = 1;
+	    basicColumnNumber = 1;
 	    if (undefined != this.semanticsFunctions) {
 		var semantics = this.parser.createSemantics ();
 		semantics.addOperation (this.semanticsName, this.semanticsFunctions);
-		this.sem = semantics (this.result).tokenize ();
+		this.sem = (semantics (this.result))[semanticsName] ();
 		return this.sem;
 	    } else {
 		return this.result.toString ();
@@ -80,14 +82,14 @@ const basicSemantics = {
     tokens: function (token_plural) { return token_plural.tokenize ().join ('');},
     basicToken: function (b) { return b.tokenize (); },
     newline: function (nl) {
-	var result = makeToken ("basic", "\n", lineNumber, columnNumber);
-	lineNumber += 1;
-	columnNumber = 1;
+	var result = makeToken ("basic", "\n", basicLineNumber, basicColumnNumber);
+	basicLineNumber += 1;
+	basicColumnNumber = 1;
 	return result;
     },
     character: function (c) {
-	var result = makeToken ("basic", c.tokenize (), lineNumber, columnNumber);
-	columnNumber += 1;
+	var result = makeToken ("basic", c.tokenize (), basicLineNumber, basicColumnNumber);
+	basicColumnNumber += 1;
 	return result;
     },
     _terminal: function() { return this.primitiveValue; }
@@ -95,15 +97,18 @@ const basicSemantics = {
 
 const commentGrammar =
   `comments {
-     Tokens = (NewlineToken | CommentToken | BasicToken)+
-     NewlineToken = "token" "basic" newlineChar Line Column
-     SlashSlashToken = SlashToken SlashToken 
-     CommentToken = SlashSlashToken AnyTokenExceptNewline*
+     Tokens = (CommentToken | BasicToken)+
      BasicToken = "token" "basic" char Line Column
-     SlashToken = "token" "basic" slashChar Line Column
-     AnyTokenExceptNewline = ~NewlineToken BasicToken
+     CommentToken = SlashSlashToken AnyTokenExceptNewline*
+       SlashSlashToken = FirstSlashToken SlashToken 
+       NewlineToken = "token" "basic" newlineChar Line Column
+       FirstSlashToken = "token" "basic" slashChar Line Column
+       SlashToken = "token" "basic" slashChar Line Column
+       AnyTokenExceptNewline = ~NewlineToken BasicTokenChar
+       BasicTokenChar = "token" "basic" char Line Column
      Line = integer
      Column = integer
+
      integer = num+
      num = "0" .. "9"
      char = "'" any "'"
@@ -111,8 +116,41 @@ const commentGrammar =
      slashChar = "'" "/" "'"
   }`;
 
+const commentSemantics = {
+    Tokens: function (token_plural) { return token_plural.comment ().join (''); },
+    CommentToken: function (slashSlashToken, anyTokenExceptNewline_plural) {
+	var position = slashSlashToken.comment ();
+	var text = anyTokenExceptNewline_plural.comment ().join ('');
+	return `token comment '${text}' ${position.line} ${position.column}\n`;
+    },
+    NewlineToken: function (_token, _basic, _newlineChar, line, column) { return ""; },
+    SlashSlashToken: function (firstSlash, _slash) {
+	return firstSlash.comment ();
+    },
+    BasicToken: function (_token, _basic, c, line, column) { 
+	return `token basic '${c.comment ()}' ${line.comment ()} ${column.comment ()}\n`;
+    },
+    BasicTokenChar: function (_token, _basic, c, line, column) { 
+	return c.comment ();
+    },
+    FirstSlashToken: function (_token, _basic, _slash, line, column) {
+	return { 'line': line.comment (), 'column': column.comment () };
+    },
+    SlashToken: function (_token, _basic, _slash, _line, _column) { return ""; },
+    AnyTokenExceptNewline: function (basicToken) { return basicToken.comment (); },
+    Line: function (integer) { return integer.comment (); },
+    Column: function (integer) { return integer.comment (); },
+    integer: function (num_plural) { return parseInt (num_plural.comment ().join ('')); },
+    num: function (n) { return n.comment (); },
+    char: function (_q1, c, _q2) { return c.comment (); },
+    newlineChar: function (_q1, _c, _q2) { return "\n"; },
+    slashChar: function (_q1, _slash, _q2) { return "/"; },
+    _terminal: function() { return this.primitiveValue; }
+};
+
 var p1 = new tokenParser ( basicGrammar, 'tokenize', basicSemantics );
-var p2 = new tokenParser ( commentGrammar );
+//var p2 = new tokenParser ( commentGrammar );
+var p2 = new tokenParser ( commentGrammar, 'comment', commentSemantics );
 
 console.log (
     p2.parse (
