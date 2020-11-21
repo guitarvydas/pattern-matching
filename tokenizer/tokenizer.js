@@ -47,7 +47,6 @@ function tokenParse (grammar, semanticsName, semanticsFunctions) {
     var columnNumber;
     
     if (result.succeeded ()) {
-	console.log ("parse succeeded");
 	lineNumber = 1;
 	columnNumber = 1;
 	if (undefined != semanticsFunctions) {
@@ -55,6 +54,8 @@ function tokenParse (grammar, semanticsName, semanticsFunctions) {
 	    semantics.addOperation (semanticsName, semanticsFunctions);
 	    var p = semantics (result).tokenize ();
 	    return p;
+	} else {
+	    return result.toString ();
 	}
     } else {
 	console.log ("parse failed");
@@ -62,29 +63,14 @@ function tokenParse (grammar, semanticsName, semanticsFunctions) {
 }
 
 
-tokenParse (
+var r = tokenParse (
     `tokens {
 	tokens = basicToken+
 	basicToken = newline | character
 	newline = "\\n"
 	character = any
-    }`,
-    'tokenize',
-    {
-	tokens: function (token_plural) { return token_plural.tokenize ().join ('');},
-	basicToken: function (b) { return b.tokenize (); },
-	newline: function (nl) { 
-	    this.columnNumber += 1;
-	    var result = makeToken ("basic", "\n", this.lineNumber, this.columnNumber);
-	    this.lineNumber += 1;
-	    this.columnNumber = 1;
-	    return result;
-	},
-	character: function (c) { 
-	    this.columnNumber += 1;
-	    var result = makeToken ("basic", c.tokenize (), this.lineNumber, this.columnNumber);
-	    return result;
-	},
-   	_terminal: function() { return this.primitiveValue; }
-    }    
+    }`
 );
+
+console.log (r);
+
