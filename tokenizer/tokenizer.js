@@ -66,6 +66,7 @@ function tokenParser (grammar, semanticsName, semanticsFunctions) {
 		return this.result.toString ();
 	    }
 	} else {
+	    console.log ("parse failed");
 	    return "parse failed";
 	}
     }
@@ -98,10 +99,15 @@ const basicSemantics = {
     _terminal: function() { return this.primitiveValue; }
 };
 
+function joinText (tokenArray) {
+    var stringArray = tokenArray.map (token => token.text);
+    return stringArray.join ('');
+}
+
 const commentGrammar =
   `
    comments {
-     Tokens = (CommentToken | BasicToken)+
+     Tokens = "[" (CommentToken | BasicToken)+ "]"
      BasicToken = "{" BasicKind "," Text "," Line "," Column "}"
      CommentToken = SlashSlashToken AnyTokenExceptNewline*
        SlashSlashToken = FirstSlashToken SlashToken 
@@ -128,13 +134,18 @@ const commentGrammar =
 `;
 
 const commentSemantics = {
-    Tokens: function (token_plural) {
-	return token_plural.comment (); 
+    Tokens: function (_lbracket, token_plural, _rbracket) {
+	return JSON.stringify (token_plural.comment ()); 
     },
     CommentToken: function (slashSlashToken, anyTokenExceptNewline_plural) {
 	var first = slashSlashToken.comment ();
-	var text = anyTokenExceptNewline_plural.comment ().join ('');
-	return { "token" : "comment", "text" : text, "line" : first.line (), "column" : first.column };
+	var text = joinText (anyTokenExceptNewline_plural.comment ());
+	return { 
+	    "token" : "comment", 
+	    "text" : text, 
+	    "line" : first.line, 
+	    "column" : first.column
+	}
     },
     NewlineToken: function (_lbrace, basicKind, _comma1, _newlineChar, _comma2, line, _comma3, column, _rbrace) { 
 	return { 
@@ -286,14 +297,15 @@ function lineify (str) {
 console.log ("1:");
 console.log (
     lineify (p1.parse ("a\n//comment\ndef\n"))
-	//p1.parse ("a")
+    //lineify (p1.parse ("a"))
 );
 console.log ("2:");
 console.log (
     lineify (
 	p2.parse (
 	    //p1.parse ("a\n//comment\ndef\n")
-	    p1.parse ("a")
+	    p1.parse ("a\n")
+	    //p1.parse ("a")
 	)
     )
 );
