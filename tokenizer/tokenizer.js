@@ -38,7 +38,7 @@ const ohm = require ('ohm-js');
 
 function makeToken (kind, s, line, column) {
     var token = { 'token' : kind, 'text' : s, 'line' : line, 'column' : column };
-    return `${JSON.stringify (token)}\n`;
+    return token;
 };
 
 var columnNumber;
@@ -80,8 +80,8 @@ const basicGrammar =
     }`;
 
 const basicSemantics = {
-    tokens: function (token_plural) { return token_plural.tokenize ().join ('');},
-    basicToken: function (b) { return b.tokenize (); },
+    tokens: function (token_plural) { return token_plural.tokenize ().join ('\n');},
+    basicToken: function (b) { return JSON.stringify (b.tokenize ()); },
     newline: function (nl) {
 	var result = makeToken ("basic", "\n", basicLineNumber, basicColumnNumber);
 	basicLineNumber += 1;
