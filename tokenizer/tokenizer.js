@@ -44,45 +44,50 @@ tokens {
 
 
 const ohm = require ('ohm-js');
-const ohmParser = ohm.grammar (tokenizerGrammar);
-const result = ohmParser.match (text);
-var lineNumber;
-var columnNumber;
 
-function makeToken (kind, s) {
-    return `token ${kind} '${s}' ${lineNumber} ${columnNumber}\n`;
+function makeToken (kind, s, line, column) {
+    return `token ${kind} '${s}' ${line} ${column}\n`;
+};
+
+function basicParse () {
+    const ohmParser = ohm.grammar (tokenizerGrammar);
+    const result = ohmParser.match (text);
+    var lineNumber;
+    var columnNumber;
+    
+    if (result.succeeded ()) {
+	console.log ("Ohm matching succeeded");
+	lineNumber = 1;
+	columnNumber = 1;
+	var semantics = ohmParser.createSemantics ();
+	addTokenizer (semantics);
+	basicParse = semantics (result).tokenize ();
+	console.log (basicParse);
+    } else {
+	console.log ("Ohm matching failed");
+    }
+
+    function addTokenizer (semantics) {
+	semantics.addOperation (
+	    'tokenize',
+	    {
+		tokens: function (token_plural) { return token_plural.tokenize ().join ('');},
+		basicToken: function (b) { return b.tokenize (); },
+		newline: function (nl) { 
+		    columnNumber += 1;
+		    var result = makeToken ("basic", "\n", lineNumber, columnNumber);
+		    lineNumber += 1;
+		    columnNumber = 1;
+		    return result;
+		},
+		character: function (c) { 
+		    columnNumber += 1;
+		    var result = makeToken ("basic", c.tokenize (), lineNumber, columnNumber);
+		    return result;
+		},
+   		_terminal: function() { return this.primitiveValue; }
+	    });
+    }
 }
 
-if (result.succeeded ()) {
-    console.log ("Ohm matching succeeded");
-    lineNumber = 1;
-    columnNumber = 1;
-    var semantics = ohmParser.createSemantics ();
-    addTokenizer (semantics);
-    console.log ('tokenized:');
-    console.log (semantics (result).tokenize ());
-} else {
-    console.log ("Ohm matching failed");
-}
-
-function addTokenizer (semantics) {
-    semantics.addOperation (
-	'tokenize',
-	{
-	    tokens: function (token_plural) { return token_plural.tokenize ().join ('');},
-	    basicToken: function (b) { return b.tokenize (); },
-	    newline: function (nl) { 
-		columnNumber += 1;
-		var result = makeToken ("basic", "\n");
-		lineNumber += 1;
-		columnNumber = 1;
-		return result;
-	    },
-	    character: function (c) { 
-		columnNumber += 1;
-		var result = makeToken ("basic", c.tokenize ());
-		return result;
-	    },
-   	    _terminal: function() { return this.primitiveValue; }
-	});};
-
+basicParse ();
