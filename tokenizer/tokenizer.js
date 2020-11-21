@@ -37,7 +37,7 @@ const text = `
 const ohm = require ('ohm-js');
 
 function makeToken (kind, s, line, column) {
-    return `token ${kind} '${s}' ${line} ${column}\n`;
+    return `{ kind: ${kind}, text: '${s}', line: ${line}, column: ${column} }\n`;
 };
 
 var columnNumber;
@@ -152,39 +152,100 @@ const stringGrammar =
   `comments {
      Tokens = (StringToken | Token)+
      Token = "token" Kind text Line Column
-     StringToken = StringDelimiterToken AnyTokenExceptStringDelimiter* StringDelimiterToken
+     StringToken = FirstStringDelimiterToken AnyTokenExceptStringDelimiter* StringDelimiterToken
   
-     Kind = Identifier
-     Line = integer
-     Column = integer
+     Kind = KindIdentifier
 
+     FirstStringDelimiterToken = StringDelimiterToken
      StringDelimiterToken = "token" Kind stringDelimiter Line Column
 
-     Identifier = firstChar followChar*
+     KindIdentifier = ~Keyword FirstCharToken FollowCharToken*
      FirstCharToken = "token" Kind firstChar Line Column
      FollowCharToken = "token" Kind followChar Line Column
      firstChar = "A" .. "Z" | "a" .. "z"
      followChar = "0".."9" | "-" | "_" | firstChar
+
+     text = "'" (~"'" any)* "'"
+
+     stringDelimiter = "'"
+     AnyTokenExceptStringDelimiter = ~StringDelimiterToken Token
+
+     Keyword = "token"
+
+     Line = integer
+     Column = integer
      integer = num+
      num = "0" .. "9"
      char = "'" any "'"
      newlineChar = "'" "\\n" "'"
      slashChar = "'" "/" "'"
-     text = "'" (~"'" any)* "'"
 
-     stringDelimiter = "'"
-     AnyTokenExceptStringDelimiter = ~StringDelimiterToken Token
   }`;
+
+const stringSemantics = {
+    Tokens: function (token_plural) { return token_plural.string ().join (''); },
+    Token: function (_token, kind, text, line, column) {
+	return "token " + kind.string () + text.string () + line.string () + column.string ();
+    },
+    StringToken: function (firstStringDelimiterToken, anyTokenExceptStringDelimiter_plural, _stringDelimiterToken2) {
+	var lineCol = firstStringDelimiterToken.string ();
+	var text = anyTokenExceptStringDelimiter_plural.string ().join ('')
+	return makeToken ("string", text, lineCol.line, lineCol.column);
+    },
+    Kind: function (kindIdentifier) { return kindIdentifier.string (); },
+    FirstStringDelimiterToken: function (stringDelimiterToken) {
+	return stringDelimiterToken.string ();
+    },
+    StringDelimiterToken: function (_token, kind, stringDelimiter, line, column) {
+	return { 'line': line, 'column': column };
+    },
+    KindIdentifier: function (firstCharToken, followCharToken_plural) {
+	return firstChar.string () + followChar_plural.string ().join ('');
+    },
+    FirstCharToken: function (_token, _kind, c, line, column) {
+	lineNumber = line;
+	columnNumber = column;
+	return c.string ();
+    },
+    FollowCharToken: function (_token, _kind, c, line, column) {
+	return c.string ();
+    },
+    firstChar: function (c) { return c.string (); },
+    followChar: function (c) { return c.string (); },
+    text: function (_q1, any_pural, _q2) { return any_plural.string ().join (''); },
+    stringDelimiter: function (_q) { return '"'; },
+    AnyTokenExceptStringDelimiter: function (token) { return token.string (); },
+
+    Line: function (integer) { return integer.comment (); },
+    Column: function (integer) { return integer.comment (); },
+    integer: function (num_plural) { return parseInt (num_plural.comment ().join ('')); },
+    num: function (n) { return n.comment (); },
+    char: function (_q1, c, _q2) { return c.comment (); },
+    newlineChar: function (_q1, _c, _q2) { return "\n"; },
+    slashChar: function (_q1, _slash, _q2) { return "/"; },
+    _terminal: function() { return this.primitiveValue; }
+};    
 
 
 var p1 = new tokenParser ( basicGrammar, 'tokenize', basicSemantics );
 var p2 = new tokenParser ( commentGrammar, 'comment', commentSemantics );
-var p3 = new tokenParser ( stringGrammar );
+var p3 = new tokenParser ( stringGrammar, 'string', stringSemantics );
 
+console.log (
+	p1.parse ("a\n//comment\ndef\n")
+	//p1.parse ("a")
+);
+console.log (
+    p2.parse (
+	//p1.parse ("a\n//comment\ndef\n")
+	p1.parse ("a")
+    )
+);
 console.log (
     p3.parse (
 	p2.parse (
-	    p1.parse ("a\n//comment\ndef\n")
+	    //p1.parse ("a\n//comment\ndef\n")
+	    p1.parse ("a")
 	)
     )
 );
