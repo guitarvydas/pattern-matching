@@ -62,7 +62,7 @@ function basicParse () {
 	var semantics = parser.createSemantics ();
 	addTokenizer (semantics);
 	basicParse = semantics (result).tokenize ();
-	console.log (basicParse);
+	return basicParse;
     } else {
 	console.log ("Ohm matching failed");
     }
@@ -90,4 +90,4 @@ function basicParse () {
     }
 }
 
-basicParse ();
+console.log (basicParse ());
