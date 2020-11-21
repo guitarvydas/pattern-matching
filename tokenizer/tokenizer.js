@@ -40,9 +40,10 @@ function makeToken (kind, s, line, column) {
     return `token ${kind} '${s}' ${line} ${column}\n`;
 };
 
+var columnNumber;
+var lineNumber;
+
 function tokenParser (grammar, semanticsName, semanticsFunctions) {
-    this.lineNumber = 0;
-    this.columnNumber = 0;
     this.semanticsName = semanticsName;
     this.semanticsFunctions = semanticsFunctions;
 
@@ -51,8 +52,8 @@ function tokenParser (grammar, semanticsName, semanticsFunctions) {
 	this.result = this.parser.match (text);
 	
 	if (this.result.succeeded ()) {
-	    this.lineNumber = 1;
-	    this.columnNumber = 1;
+	    lineNumber = 1;
+	    columnNumber = 1;
 	    if (undefined != this.semanticsFunctions) {
 		var semantics = this.parser.createSemantics ();
 		semantics.addOperation (this.semanticsName, this.semanticsFunctions);
@@ -75,7 +76,24 @@ const basicGrammar =
 	character = any
     }`;
 
-var p = new tokenParser ( basicGrammar );
+const basicSemantics = {
+    tokens: function (token_plural) { return token_plural.tokenize ().join ('');},
+    basicToken: function (b) { return b.tokenize (); },
+    newline: function (nl) {
+	var result = makeToken ("basic", "\n", lineNumber, columnNumber);
+	lineNumber += 1;
+	columnNumber = 1;
+	return result;
+    },
+    character: function (c) {
+	var result = makeToken ("basic", c.tokenize (), lineNumber, columnNumber);
+	columnNumber += 1;
+	return result;
+    },
+    _terminal: function() { return this.primitiveValue; }
+};
 
-console.log (p.parse ("abc"));
+var p = new tokenParser ( basicGrammar, 'tokenize', basicSemantics );
+
+console.log (p.parse ("abc\ndef\n"));
 
