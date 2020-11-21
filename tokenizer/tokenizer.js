@@ -50,8 +50,8 @@ function makeToken (kind, s, line, column) {
 };
 
 function basicParse () {
-    const ohmParser = ohm.grammar (tokenizerGrammar);
-    const result = ohmParser.match (text);
+    const parser = ohm.grammar (tokenizerGrammar);
+    const result = parser.match (text);
     var lineNumber;
     var columnNumber;
     
@@ -59,7 +59,7 @@ function basicParse () {
 	console.log ("Ohm matching succeeded");
 	lineNumber = 1;
 	columnNumber = 1;
-	var semantics = ohmParser.createSemantics ();
+	var semantics = parser.createSemantics ();
 	addTokenizer (semantics);
 	basicParse = semantics (result).tokenize ();
 	console.log (basicParse);
