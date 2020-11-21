@@ -66,7 +66,7 @@ function tokenParser (grammar, semanticsName, semanticsFunctions) {
 		return this.result.toString ();
 	    }
 	} else {
-	    console.log ("parse failed");
+	    return "parse failed";
 	}
     }
 }
@@ -129,7 +129,7 @@ const commentGrammar =
 
 const commentSemantics = {
     Tokens: function (token_plural) {
-	return token_plural.comment ().join (''); 
+	return token_plural.comment (); 
     },
     CommentToken: function (slashSlashToken, anyTokenExceptNewline_plural) {
 	var first = slashSlashToken.comment ();
@@ -278,6 +278,7 @@ var p2 = new tokenParser ( commentGrammar, 'comment', commentSemantics );
 var p3 = new tokenParser ( stringGrammar, 'string', stringSemantics );
 
 function lineify (str) {
+    // insert newlines for readability
     var s = str.replace (/},{/g, "},\n{");
     return s;
 };
@@ -289,17 +290,21 @@ console.log (
 );
 console.log ("2:");
 console.log (
-    p2.parse (
-	//p1.parse ("a\n//comment\ndef\n")
-	p1.parse ("a")
+    lineify (
+	p2.parse (
+	    //p1.parse ("a\n//comment\ndef\n")
+	    p1.parse ("a")
+	)
     )
 );
 console.log ("3:");
 console.log (
-    p3.parse (
-	p2.parse (
-	    //p1.parse ("a\n//comment\ndef\n")
-	    p1.parse ("a")
+    lineify (
+	p3.parse (
+	    p2.parse (
+		//p1.parse ("a\n//comment\ndef\n")
+		p1.parse ("a")
+	    )
 	)
     )
 );
