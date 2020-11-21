@@ -54,7 +54,24 @@ const result = ohmParser.match (text);
 
 if (result.succeeded ()) {
     console.log ("Ohm matching succeeded");
+    var semantics = ohmParser.createSemantics ();
+    addTokenize (semantics);
 } else {
     console.log ("Ohm matching failed");
 }
 
+function addTokenize (semantics) {
+    semantics.addOperation (
+	'tokenize',
+	{
+	    tokens: function (token_plural) {},
+	    token: function (token) {},
+	    commentToken: function (_slashslash, any_plural) {},
+	    ws: function (c) {},
+	    newline: function (nl) {},
+	    stringToken: function (_delim1, any_plural, _delim2) {},
+	    symbolToken: function (any_plural) {},
+	    integerToken: function (digit_plural) {},
+	    stringDelimiter: function (_delim) {},
+   	    _terminal: function() { return this.primitiveValue; }
+	});};
