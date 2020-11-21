@@ -37,7 +37,8 @@ const text = `
 const ohm = require ('ohm-js');
 
 function makeToken (kind, s, line, column) {
-    return `{ kind: ${kind}, text: '${s}', line: ${line}, column: ${column} }\n`;
+    var token = { 'token' : kind, 'text' : s, 'line' : line, 'column' : column };
+    return `${JSON.stringify (token)}\n`;
 };
 
 var columnNumber;
@@ -98,22 +99,23 @@ const basicSemantics = {
 const commentGrammar =
   `comments {
      Tokens = (CommentToken | BasicToken)+
-     BasicToken = "token" "basic" char Line Column
+     BasicToken = "{" BasicKind "," "text" ":" char "," Line "," Column "}"
      CommentToken = SlashSlashToken AnyTokenExceptNewline*
        SlashSlashToken = FirstSlashToken SlashToken 
-       NewlineToken = "token" "basic" newlineChar Line Column
-       FirstSlashToken = "token" "basic" slashChar Line Column
-       SlashToken = "token" "basic" slashChar Line Column
+       NewlineToken = "{" BasicKind "," newlineChar "," Line "," Column "}"
+       FirstSlashToken = "{" BasicKind "," slashChar "," Line "," Column "}"
+       SlashToken = "{" BasicKind "," slashChar "," Line "," Column "}"
        AnyTokenExceptNewline = ~NewlineToken BasicTokenChar
-       BasicTokenChar = "token" "basic" char Line Column
-     Line = integer
-     Column = integer
+       BasicTokenChar = "{" BasicKind "," char "," Line "," Column "}"
+     BasicKind ="kind" ":" "basic"
+     Line = "line" ":" integer
+     Column = "column" ":" integer
 
      integer = num+
      num = "0" .. "9"
      char = "'" any "'"
-     newlineChar = "'" "\\n" "'"
-     slashChar = "'" "/" "'"
+     newlineChar = "text" ":" "'" "\\n" "'"
+     slashChar = "text" ":" "'" "/" "'"
   }`;
 
 const commentSemantics = {
