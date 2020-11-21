@@ -150,11 +150,15 @@ const commentSemantics = {
 
 const stringGrammar =
   `comments {
-     Tokens = (Token)+
+     Tokens = (StringToken | Token)+
      Token = "token" Kind text Line Column
+     StringToken = StringDelimiterToken AnyTokenExceptStringDelimiter* StringDelimiterToken
+  
      Kind = Identifier
      Line = integer
      Column = integer
+
+     StringDelimiterToken = "token" Kind stringDelimiter Line Column
 
      Identifier = firstChar followChar*
      FirstCharToken = "token" Kind firstChar Line Column
@@ -167,6 +171,9 @@ const stringGrammar =
      newlineChar = "'" "\\n" "'"
      slashChar = "'" "/" "'"
      text = "'" (~"'" any)* "'"
+
+     stringDelimiter = "'"
+     AnyTokenExceptStringDelimiter = ~StringDelimiterToken Token
   }`;
 
 
