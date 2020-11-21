@@ -93,7 +93,30 @@ const basicSemantics = {
     _terminal: function() { return this.primitiveValue; }
 };
 
-var p = new tokenParser ( basicGrammar, 'tokenize', basicSemantics );
+const commentGrammar =
+  `comments {
+     Tokens = (NewlineToken | CommentToken | BasicToken)+
+     NewlineToken = "token" "basic" newlineChar Line Column
+     SlashSlashToken = SlashToken SlashToken 
+     CommentToken = SlashSlashToken AnyTokenExceptNewline*
+     BasicToken = "token" "basic" char Line Column
+     SlashToken = "token" "basic" slashChar Line Column
+     AnyTokenExceptNewline = ~NewlineToken BasicToken
+     Line = integer
+     Column = integer
+     integer = num+
+     num = "0" .. "9"
+     char = "'" any "'"
+     newlineChar = "'" "\\n" "'"
+     slashChar = "'" "/" "'"
+  }`;
 
-console.log (p.parse ("abc\ndef\n"));
+var p1 = new tokenParser ( basicGrammar, 'tokenize', basicSemantics );
+var p2 = new tokenParser ( commentGrammar );
+
+console.log (
+    p2.parse (
+	p1.parse ("a\n//comment\ndef\n")
+    )
+);
 
