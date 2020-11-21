@@ -50,7 +50,7 @@ var lineNumber;
 var columnNumber;
 
 function makeToken (kind, s) {
-    return `token ${kind} ${s} ${lineNumber} ${columnNumber}\n`;
+    return `token ${kind} '${s}' ${lineNumber} ${columnNumber}\n`;
 }
 
 if (result.succeeded ()) {
