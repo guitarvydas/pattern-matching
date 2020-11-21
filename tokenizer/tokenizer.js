@@ -71,10 +71,6 @@ function tokenParser (grammar, semanticsName, semanticsFunctions) {
     }
 }
 
-function stringify (tokenArray) {
-    return tokenArray.map ( token => JSON.stringify (token) );
-};
-
 const basicGrammar =
     `tokens {
 	tokens = basicToken+
@@ -85,7 +81,7 @@ const basicGrammar =
 
 const basicSemantics = {
     tokens: function (token_plural) { 
-	return stringify (token_plural.tokenize ());
+	return JSON.stringify (token_plural.tokenize ());
     },
     basicToken: function (b) { return b.tokenize (); },
     newline: function (nl) {
@@ -281,9 +277,14 @@ var p1 = new tokenParser ( basicGrammar, 'tokenize', basicSemantics );
 var p2 = new tokenParser ( commentGrammar, 'comment', commentSemantics );
 var p3 = new tokenParser ( stringGrammar, 'string', stringSemantics );
 
+function lineify (str) {
+    var s = str.replace (/},{/g, "},\n{");
+    return s;
+};
+
 console.log ("1:");
 console.log (
-	p1.parse ("a\n//comment\ndef\n")
+    lineify (p1.parse ("a\n//comment\ndef\n"))
 	//p1.parse ("a")
 );
 console.log ("2:");
