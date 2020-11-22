@@ -106,8 +106,9 @@ function joinText (tokenArray) {
 
 const commentGrammar =
   `
-   comments {
-     Tokens = "[" (CommentToken | BasicToken)+ "]"
+  comments {
+     TokenArray = "[" Token ("," Token)* "]"
+     Token = CommentToken | BasicToken
      BasicToken = "{" BasicKind "," Text "," Line "," Column "}"
      CommentToken = SlashSlashToken AnyTokenExceptNewline*
        SlashSlashToken = FirstSlashToken SlashToken 
@@ -134,9 +135,13 @@ const commentGrammar =
 `;
 
 const commentSemantics = {
-    Tokens: function (_lbracket, token_plural, _rbracket) {
-	return JSON.stringify (token_plural.comment ()); 
+    TokenArray: function (_lbracket, token, _comma, token_plural, _rbracket) {
+	var t1 = token.comment ();
+	var t2array = token_plural.comment ();
+	t2array.unshift (t1);
+	return JSON.stringify (t2array);
     },
+    Token: function (token) { return token.comment (); },
     CommentToken: function (slashSlashToken, anyTokenExceptNewline_plural) {
 	var first = slashSlashToken.comment ();
 	var text = joinText (anyTokenExceptNewline_plural.comment ());
@@ -197,6 +202,15 @@ const commentSemantics = {
     integer: function (num_plural) { return parseInt (num_plural.comment ().join ('')); },
     num: function (n) { return n.comment (); },
     char: function (_q1, c, _q2) { return c.comment (); },
+    simpleChar: function (c) { return c.comment (); },
+    escapedChar: function (_backSlash, any) { 
+	var c = any.comment ();
+	if (c == "n") {
+	    return "\n";
+	} else {
+	    return c;
+	}
+    },
     Text: function (_q1, _text, _q2, _colon, c) { return c.comment (); },
     BasicKind: function (_q1, _kind, _q2, _colon, _q3, _basic, _q4) { return "basic"; },
     newlineChar: function (_q1, _text, _q2, _colon, _q3, _newline, _q4) { return "\n"; },
@@ -296,8 +310,8 @@ function lineify (str) {
 
 console.log ("1:");
 console.log (
-    lineify (p1.parse ("a\n//comment\ndef\n"))
-    //lineify (p1.parse ("a"))
+    //lineify (p1.parse ("a\n//comment\ndef\n"))
+    lineify (p1.parse ("a\n"))
 );
 console.log ("2:");
 console.log (
@@ -315,7 +329,7 @@ console.log (
 	p3.parse (
 	    p2.parse (
 		//p1.parse ("a\n//comment\ndef\n")
-		p1.parse ("a")
+		p1.parse ("a\n")
 	    )
 	)
     )
