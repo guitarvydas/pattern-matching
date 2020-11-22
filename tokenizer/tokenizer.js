@@ -1,4 +1,8 @@
-const basicGrammar =
+//
+// non-general grammar and semantics for mapping characters into tokens...
+//
+
+const tokensGrammar =
     `tokens {
 	tokens = basicToken+
 	basicToken = newline | character
@@ -6,7 +10,7 @@ const basicGrammar =
 	character = any
     }`;
 
-const basicSemantics = {
+const tokensSemantics = {
     tokens: function (token_plural) { 
 	return JSON.stringify (token_plural.tokens ());
     },
