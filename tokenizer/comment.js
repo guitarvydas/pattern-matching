@@ -21,9 +21,10 @@ const commentGrammar =
      integer = num+
      num = "0" .. "9"
      char = quote (escapedChar | simpleChar) quote
-     escapedChar = "\\\\" any
+     escapeChar = "\\\\"
+     escapedChar = escapeChar any
      simpleChar = any
-     newlineChar = quote "text" quote ":" quote "\\n" quote
+     newlineChar = quote "text" quote ":" quote escapeChar "n" quote
      slashChar = quote "text" quote ":" quote "/" quote
    }
 `;
@@ -107,7 +108,7 @@ const commentSemantics = {
     },
     Text: function (_q1, _text, _q2, _colon, c) { return c.comment (); },
     BasicKind: function (_q1, _kind, _q2, _colon, _q3, _basic, _q4) { return "basic"; },
-    newlineChar: function (_q1, _text, _q2, _colon, _q3, _newline, _q4) { return "\n"; },
+    newlineChar: function (_q1, _text, _q2, _colon, _q3, _escape, _n, _q4) { return "\n"; },
     slashChar: function (_q1, _text, _q2, _colon, _q3, _slash, _q4) { return "/"; },
 
     _terminal: function() { return this.primitiveValue; }

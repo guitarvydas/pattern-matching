@@ -4,9 +4,7 @@ console.log ("2:");
 console.log (
     lineify (
 	p2.parse (
-	    p1.parse ("a\n//comment\ndef\n")
-	    //p1.parse ("a\n\"def\"")
-	    //p1.parse ("a")
+	    p1.parse (testText)
 	)
     )
 );
