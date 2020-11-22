@@ -8,9 +8,9 @@ const basicGrammar =
 
 const basicSemantics = {
     tokens: function (token_plural) { 
-	return JSON.stringify (token_plural.tokenize ());
+	return JSON.stringify (token_plural.tokens ());
     },
-    basicToken: function (b) { return b.tokenize (); },
+    basicToken: function (b) { return b.tokens (); },
     newline: function (nl) {
 	var result = makeToken ("basic", "\n", basicLineNumber, basicColumnNumber);
 	basicLineNumber += 1;
@@ -18,7 +18,7 @@ const basicSemantics = {
 	return result;
     },
     character: function (c) {
-	var result = makeToken ("basic", c.tokenize (), basicLineNumber, basicColumnNumber);
+	var result = makeToken ("basic", c.tokens (), basicLineNumber, basicColumnNumber);
 	basicColumnNumber += 1;
 	return result;
     },

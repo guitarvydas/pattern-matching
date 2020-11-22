@@ -1,9 +1,10 @@
-function tokenParser (grammar, semanticsName, semanticsFunctions) {
-    this.semanticsName = semanticsName;
+function tokenParser (name, grammars, semanticsFunctions) {
+    this.name = name;
     this.semanticsFunctions = semanticsFunctions;
 
     this.parse = function (text) {
-	this.parser = ohm.grammar (grammar);
+	this.grammarsNamespace = ohm.grammars (grammars);
+	this.parser = this.grammarsNamespace[this.name];
 	this.result = this.parser.match (text);
 	
 	if (this.result.succeeded ()) {
@@ -11,8 +12,8 @@ function tokenParser (grammar, semanticsName, semanticsFunctions) {
 	    basicColumnNumber = 1;
 	    if (undefined != this.semanticsFunctions) {
 		var semantics = this.parser.createSemantics ();
-		semantics.addOperation (this.semanticsName, this.semanticsFunctions);
-		this.sem = (semantics (this.result))[semanticsName] ();
+		semantics.addOperation (this.name, this.semanticsFunctions);
+		this.sem = (semantics (this.result))[name] ();
 		return this.sem;
 	    } else {
 		return this.result.toString ();

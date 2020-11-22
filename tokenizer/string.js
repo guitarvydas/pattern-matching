@@ -1,7 +1,7 @@
 const stringGrammar = `
 strings {
      TokenArray = "[" Token ("," Token)* "]"
-     Token = StringToken | BasicToken
+     Token = BasicToken
      BasicToken = "{" Kind "," Text "," Line "," Column "}"
      StringToken = FirstStringDelimiterToken AnyTokenExceptStringDelimiter* StringDelimiterToken
   

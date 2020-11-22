@@ -1,15 +1,10 @@
 const commentGrammar =
   `
-  comments {
+  basic {
      TokenArray = "[" Token ("," Token)* "]"
-     Token = Comment | BasicToken
+     Token = BasicToken
      BasicToken = "{" BasicKind "," Text "," Line "," Column "}"
-     Comment = SlashSlashToken ("," AnyTokenExceptNewline)*
-     SlashSlashToken = FirstSlashToken "," SlashToken 
        NewlineToken = "{" BasicKind "," newlineChar "," Line "," Column "}"
-       FirstSlashToken = "{" BasicKind "," slashChar "," Line "," Column "}"
-       SlashToken = "{" BasicKind "," slashChar "," Line "," Column "}"
-       AnyTokenExceptNewline = ~NewlineToken BasicToken
        BasicTokenChar = "{" BasicKind "," char "," Line "," Column "}"
      BasicKind = quote "token" quote ":" quote "basic" quote
      Line = quote "line" quote ":" integer
@@ -25,6 +20,15 @@ const commentGrammar =
      escapedChar = escapeChar any
      simpleChar = any
      newlineChar = quote "text" quote ":" quote escapeChar "n" quote
+   }
+  comment <: basic {
+     Token := Comment | BasicToken
+     Comment = SlashSlashToken ("," AnyTokenExceptNewline)*
+     SlashSlashToken = FirstSlashToken "," SlashToken 
+       FirstSlashToken = "{" BasicKind "," slashChar "," Line "," Column "}"
+       SlashToken = "{" BasicKind "," slashChar "," Line "," Column "}"
+       AnyTokenExceptNewline = ~NewlineToken BasicToken
+
      slashChar = quote "text" quote ":" quote "/" quote
    }
 `;

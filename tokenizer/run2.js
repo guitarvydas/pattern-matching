@@ -1,5 +1,5 @@
 
-var p2 = new tokenParser ( commentGrammar, 'comment', commentSemantics );
+var p2 = new tokenParser ( 'comment', commentGrammar, commentSemantics );
 console.log ("2:");
 console.log (
     lineify (
