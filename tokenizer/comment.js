@@ -2,14 +2,14 @@ const commentGrammar =
   `
   comments {
      TokenArray = "[" Token ("," Token)* "]"
-     Token = CommentToken | BasicToken
+     Token = Comment | BasicToken
      BasicToken = "{" BasicKind "," Text "," Line "," Column "}"
-     CommentToken = SlashSlashToken AnyTokenExceptNewline*
-       SlashSlashToken = FirstSlashToken SlashToken 
+     Comment = SlashSlashToken ("," AnyTokenExceptNewline)*
+     SlashSlashToken = FirstSlashToken "," SlashToken 
        NewlineToken = "{" BasicKind "," newlineChar "," Line "," Column "}"
        FirstSlashToken = "{" BasicKind "," slashChar "," Line "," Column "}"
        SlashToken = "{" BasicKind "," slashChar "," Line "," Column "}"
-       AnyTokenExceptNewline = ~NewlineToken BasicTokenChar
+       AnyTokenExceptNewline = ~NewlineToken BasicToken
        BasicTokenChar = "{" BasicKind "," char "," Line "," Column "}"
      BasicKind = quote "token" quote ":" quote "basic" quote
      Line = quote "line" quote ":" integer
@@ -23,7 +23,7 @@ const commentGrammar =
      char = quote (escapedChar | simpleChar) quote
      escapedChar = "\\\\" any
      simpleChar = any
-     newlineChar = quote "text" quote ":" "'" "\\n" "'"
+     newlineChar = quote "text" quote ":" quote "\\n" quote
      slashChar = quote "text" quote ":" quote "/" quote
    }
 `;
@@ -36,7 +36,7 @@ const commentSemantics = {
 	return JSON.stringify (t2array);
     },
     Token: function (token) { return token.comment (); },
-    CommentToken: function (slashSlashToken, anyTokenExceptNewline_plural) {
+    Comment: function (slashSlashToken, _comma, anyTokenExceptNewline_plural) {
 	var first = slashSlashToken.comment ();
 	var text = joinText (anyTokenExceptNewline_plural.comment ());
 	return { 
@@ -54,7 +54,7 @@ const commentSemantics = {
 	    'column' : column.comment ()
 	}
     },
-    SlashSlashToken: function (firstSlash, _slash) {
+    SlashSlashToken: function (firstSlash, _comma, _slash) {
 	return firstSlash.comment ();
     },
     BasicToken: function (_lbrace, basicKind, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 

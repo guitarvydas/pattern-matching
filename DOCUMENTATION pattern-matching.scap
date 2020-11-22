@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ScappleDocument Version="1.1" ID="38C731A5-63A4-4E02-BC70-C049223DF876">
+<ScappleDocument Version="1.2" ID="38C731A5-63A4-4E02-BC70-C049223DF876">
     <Notes>
         <Note ID="0" FontSize="12.0" Position="1165.0,369.0" Width="53.0">
             <Appearance>
@@ -10,16 +10,16 @@
             <String>match.js</String>
             <ConnectedNoteIDs>2, 33-34</ConnectedNoteIDs>
         </Note>
-        <Note ID="1" FontSize="12.0" Position="230.601562,222.265625" Width="99.0">
+        <Note ID="1" FontSize="12.0" Position="231.0,222.0" Width="99.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
                 <Fill>0.751293 0.937828 0.984417</Fill>
             </Appearance>
             <String>pattern-matching</String>
-            <ConnectedNoteIDs>3-11, 29</ConnectedNoteIDs>
+            <ConnectedNoteIDs>3-11, 29, 38, 40</ConnectedNoteIDs>
         </Note>
-        <Note ID="2" FontSize="12.0" Position="1275.539062,385.410156" Width="245.0">
+        <Note ID="2" FontSize="12.0" Position="1276.0,385.0" Width="245.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.798177 0.714184 0.522055</Border>
@@ -31,7 +31,7 @@
                 <FormatRange Struckthrough="Yes">0,77</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="3" FontSize="12.0" Position="361.304688,93.984375" Width="64.0">
+        <Note ID="3" FontSize="12.0" Position="361.0,94.0" Width="64.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -40,7 +40,7 @@
             <String>example 1</String>
             <ConnectedNoteIDs>1, 13</ConnectedNoteIDs>
         </Note>
-        <Note ID="4" FontSize="12.0" Position="360.304688,139.984375" Width="64.0">
+        <Note ID="4" FontSize="12.0" Position="360.9375,140.46875" Width="64.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -49,7 +49,7 @@
             <String>example 3</String>
             <ConnectedNoteIDs>1, 15</ConnectedNoteIDs>
         </Note>
-        <Note ID="5" FontSize="12.0" Position="360.304688,183.984375" Width="64.0">
+        <Note ID="5" FontSize="12.0" Position="360.0,184.0" Width="64.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -58,7 +58,7 @@
             <String>example 5</String>
             <ConnectedNoteIDs>1, 18</ConnectedNoteIDs>
         </Note>
-        <Note ID="6" FontSize="12.0" Position="359.304688,205.984375" Width="64.0">
+        <Note ID="6" FontSize="12.0" Position="359.0,206.0" Width="64.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -67,7 +67,7 @@
             <String>example 6</String>
             <ConnectedNoteIDs>1, 19</ConnectedNoteIDs>
         </Note>
-        <Note ID="7" FontSize="12.0" Position="360.304688,116.984375" Width="64.0">
+        <Note ID="7" FontSize="12.0" Position="360.0,117.0" Width="64.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -76,7 +76,7 @@
             <String>example 2</String>
             <ConnectedNoteIDs>1, 14</ConnectedNoteIDs>
         </Note>
-        <Note ID="8" FontSize="12.0" Position="359.304688,159.984375" Width="64.0">
+        <Note ID="8" FontSize="12.0" Position="361.074219,164.84375" Width="64.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -85,7 +85,7 @@
             <String>example 4</String>
             <ConnectedNoteIDs>1, 17</ConnectedNoteIDs>
         </Note>
-        <Note ID="9" FontSize="12.0" Position="442.925781,256.164062" Width="34.0">
+        <Note ID="9" FontSize="12.0" Position="443.0,256.0" Width="34.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -94,7 +94,7 @@
             <String>unity</String>
             <ConnectedNoteIDs>1, 20</ConnectedNoteIDs>
         </Note>
-        <Note ID="10" FontSize="12.0" Position="486.824219,278.753906" Width="54.0">
+        <Note ID="10" FontSize="12.0" Position="487.0,279.0" Width="54.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -103,7 +103,7 @@
             <String>factbase</String>
             <ConnectedNoteIDs>1, 21</ConnectedNoteIDs>
         </Note>
-        <Note ID="11" FontSize="12.0" Position="459.035156,318.816406" Width="94.0">
+        <Note ID="11" FontSize="12.0" Position="459.0,319.0" Width="94.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -130,7 +130,7 @@
             <String>match “ab” ; js, ohm, cl-ccpre, esrap</String>
             <ConnectedNoteIDs>7</ConnectedNoteIDs>
         </Note>
-        <Note ID="15" FontSize="12.0" Position="466.28125,138.117188" Width="229.0">
+        <Note ID="15" FontSize="12.0" Position="466.0,138.0" Width="229.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.798177 0.714184 0.522055</Border>
@@ -139,7 +139,7 @@
             <String>match “ab”, flip ; js, ohm, cl-ccpre, esrap</String>
             <ConnectedNoteIDs>4</ConnectedNoteIDs>
         </Note>
-        <Note ID="17" FontSize="12.0" Position="723.933594,161.113281" Width="423.0">
+        <Note ID="17" FontSize="12.0" Position="724.0,161.0" Width="423.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.798177 0.714184 0.522055</Border>
@@ -166,7 +166,7 @@
             <String>match html ; Ohm &amp; ESRAP ; parse, and transpile to JSON</String>
             <ConnectedNoteIDs>6</ConnectedNoteIDs>
         </Note>
-        <Note ID="20" FontSize="12.0" Position="685.8125,242.417969" Width="433.0">
+        <Note ID="20" FontSize="12.0" Position="686.0,242.0" Width="433.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.798177 0.714184 0.522055</Border>
@@ -175,7 +175,7 @@
             <String>Ohm only ; SVG (subset) transpiled to SVG (unity transform - keeps spaces) </String>
             <ConnectedNoteIDs>9</ConnectedNoteIDs>
         </Note>
-        <Note ID="21" FontSize="12.0" Position="641.996094,267.023438" Width="498.0">
+        <Note ID="21" FontSize="12.0" Position="642.0,267.0" Width="498.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.798177 0.714184 0.522055</Border>
@@ -184,7 +184,7 @@
             <String>Ohm only ; SVG (subset) transpiled to SVG + JS fact()s ; shows how to parse HTML and add it to the HTML as a factbase (JS &lt;script&gt; … &lt;/script&gt;)</String>
             <ConnectedNoteIDs>10</ConnectedNoteIDs>
         </Note>
-        <Note ID="22" FontSize="12.0" Position="635.703125,308.769531" Width="351.0">
+        <Note ID="22" FontSize="12.0" Position="636.0,309.0" Width="351.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.798177 0.714184 0.522055</Border>
@@ -193,7 +193,7 @@
             <String>HTML transpiled to HTML ; calculate bounding boxes for rects and text, add them to the JS factbase script ; Ohm only</String>
             <ConnectedNoteIDs>11</ConnectedNoteIDs>
         </Note>
-        <Note ID="23" FontSize="12.0" Position="1359.820312,442.148438" Width="245.0">
+        <Note ID="23" FontSize="12.0" Position="1360.0,442.0" Width="245.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.794796 0.560965 0.58607</Border>
@@ -205,7 +205,7 @@
                 <FormatRange Struckthrough="Yes">0,52</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="24" FontSize="12.0" Position="1672.925781,466.539062" Width="127.0">
+        <Note ID="24" FontSize="12.0" Position="1673.0,467.0" Width="127.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -217,7 +217,7 @@
                 <FormatRange Struckthrough="Yes">0,21</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="25" FontSize="12.0" Position="759.773438,409.601562" Width="184.0">
+        <Note ID="25" FontSize="12.0" Position="760.0,410.0" Width="184.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.561855 0.71062 0.779401</Border>
@@ -226,7 +226,7 @@
             <String>0. make a grammar that accepts HTML+SVG + factbase</String>
             <ConnectedNoteIDs>11, 35</ConnectedNoteIDs>
         </Note>
-        <Note ID="26" FontSize="12.0" Position="823.074219,457.71875" Width="159.0">
+        <Note ID="26" FontSize="12.0" Position="823.0,458.0" Width="159.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.561855 0.71062 0.779401</Border>
@@ -235,7 +235,7 @@
             <String>1. make an internal factbase</String>
             <ConnectedNoteIDs>11, 36</ConnectedNoteIDs>
         </Note>
-        <Note ID="27" FontSize="12.0" Position="841.746094,488.882812" Width="200.0">
+        <Note ID="27" FontSize="12.0" Position="842.0,489.0" Width="200.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.561855 0.71062 0.779401</Border>
@@ -244,7 +244,7 @@
             <String>2. spit out HTML+SVG+augmented  - augmented by bounding boxes for rects and text</String>
             <ConnectedNoteIDs>11, 37</ConnectedNoteIDs>
         </Note>
-        <Note ID="28" FontSize="12.0" Position="843.800781,616.035156" Width="200.0">
+        <Note ID="28" FontSize="12.0" Position="844.0,616.0" Width="200.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.794796 0.560965 0.58607</Border>
@@ -280,7 +280,7 @@
             <String>make grammar for .pattern script</String>
             <ConnectedNoteIDs>28</ConnectedNoteIDs>
         </Note>
-        <Note ID="33" FontSize="12.0" Position="726.214844,378.429688" Width="45.0">
+        <Note ID="33" FontSize="12.0" Position="726.0,378.0" Width="45.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -289,7 +289,7 @@
             <String>foreign</String>
             <ConnectedNoteIDs>0, 11</ConnectedNoteIDs>
         </Note>
-        <Note ID="34" FontSize="12.0" Position="1240.125,328.480469" Width="245.0">
+        <Note ID="34" FontSize="12.0" Position="1240.0,328.0" Width="245.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1">0.798177 0.714184 0.522055</Border>
@@ -325,13 +325,41 @@
             <String>…/bounding-boxes-manual-ohm.js</String>
             <ConnectedNoteIDs>27</ConnectedNoteIDs>
         </Note>
+        <Note ID="38" FontSize="12.0" Position="462.566406,720.15625" Width="57.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1"></Border>
+                <Fill>0.751293 0.937828 0.984417</Fill>
+            </Appearance>
+            <String>tokenizer</String>
+            <ConnectedNoteIDs>1, 41</ConnectedNoteIDs>
+        </Note>
+        <Note ID="40" FontSize="12.0" Position="463.0,748.0" Width="163.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.794796 0.560965 0.58607</Border>
+                <Fill>0.957566 0.766747 0.999616</Fill>
+            </Appearance>
+            <String>comments (based on tokens)</String>
+            <ConnectedNoteIDs>1, 41</ConnectedNoteIDs>
+        </Note>
+        <Note ID="41" FontSize="12.0" Position="674.0,719.0" Width="169.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.798177 0.714184 0.522055</Border>
+                <Fill>0.997722 0.89273 0.652569</Fill>
+            </Appearance>
+            <String>…/pattern-matching/tokenizer/</String>
+            <ConnectedNoteIDs>38, 40</ConnectedNoteIDs>
+        </Note>
     </Notes>
     <BackgroundShapes></BackgroundShapes>
     <Stacks>
-        <Stack>7, 4</Stack>
+        <Stack>4, 8</Stack>
         <Stack>18-19</Stack>
+        <Stack>38, 40</Stack>
     </Stacks>
-    <AutoFit>0-1, 3-11, 13-14, 19, 24, 26, 29-30, 32-33, 35-37</AutoFit>
+    <AutoFit>0-1, 3-11, 13-14, 19, 24, 26, 29-30, 32-33, 35-38, 40-41</AutoFit>
     <NoteStyles>
         <Style Name="Bubble (Blue)" ID="05A30106-FC93-4C2C-9566-6BF0D004AD2F" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>
@@ -369,6 +397,7 @@
     <UISettings>
         <BackgroundColor>0.999767 0.98837 0.949907</BackgroundColor>
         <DefaultFont>Helvetica</DefaultFont>
+        <NoteXPadding>4.0</NoteXPadding>
     </UISettings>
     <PrintSettings PaperSize="612.0,792.0" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="na-letter" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
 </ScappleDocument>
