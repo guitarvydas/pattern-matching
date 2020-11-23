@@ -1,10 +1,46 @@
-const basicSemantics = {    
+const stringsGrammar = `
+strings {
+     TokenArray = "[" NewToken ("," NewToken)* "]"
+     NewToken = BasicToken
+
+     // basic grammar
+     BasicToken = "{" BasicKind "," Text "," Line "," Column "}"
+       NewlineToken = "{" BasicKind "," newlineText "," Line "," Column "}"
+     BasicKind = quote "token" quote ":" quote identifier quote
+     Line = quote "line" quote ":" integer
+     Column = quote "column" quote ":" integer
+
+     quote = "\\""
+     Text = quote "text" quote ":" quote char+ quote
+     
+     integer = num+
+     num = "0" .. "9"
+     char = escapedChar | simpleChar
+     escape = "\\\\"
+     escapedChar = escape any
+     simpleChar = anyNotQuoteNorEscape
+     anyNotQuoteNorEscape = ~quote ~escape any
+     newlineText = quote "text" quote ":" quote escape "n" quote
+
+     identifier = firstChar followChar*
+     firstChar = "A".."Z" | "a".."z"
+     followChar = "A".."Z" | "a".."z" | "0".."9" | "-" | "_"
+
+   }
+`;
+
+const stringsSemantics = {
     TokenArray: function (_lbracket, token, _comma, token_plural, _rbracket) {
-	var t1 = token.basic ();
-	var t2array = token_plural.basic ();
+	var t1 = token.strings ();
+	var t2array = token_plural.strings ();
 	t2array.unshift (t1);
 	return JSON.stringify (t2array);
     },
+    NewToken: function (token) { return token.strings (); },
+
+	
+    // include basicSemantics
+    
     NewlineToken: function (_lbrace, basicKind, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
 	return { 
 	    'token' : basicKind.basic (),
@@ -48,5 +84,5 @@ const basicSemantics = {
     
 
     _terminal: function() { return this.primitiveValue; }
+    
 };
-
