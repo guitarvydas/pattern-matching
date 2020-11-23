@@ -17,7 +17,7 @@
                 <Fill>0.751293 0.937828 0.984417</Fill>
             </Appearance>
             <String>pattern-matching</String>
-            <ConnectedNoteIDs>3-11, 29, 38, 40</ConnectedNoteIDs>
+            <ConnectedNoteIDs>3-11, 29, 38, 40, 42-45</ConnectedNoteIDs>
         </Note>
         <Note ID="2" FontSize="12.0" Position="1276.0,385.0" Width="245.0">
             <Appearance>
@@ -40,7 +40,7 @@
             <String>example 1</String>
             <ConnectedNoteIDs>1, 13</ConnectedNoteIDs>
         </Note>
-        <Note ID="4" FontSize="12.0" Position="360.9375,140.46875" Width="64.0">
+        <Note ID="4" FontSize="12.0" Position="361.0,140.0" Width="64.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -76,7 +76,7 @@
             <String>example 2</String>
             <ConnectedNoteIDs>1, 14</ConnectedNoteIDs>
         </Note>
-        <Note ID="8" FontSize="12.0" Position="361.074219,164.84375" Width="64.0">
+        <Note ID="8" FontSize="12.0" Position="361.0,168.0" Width="64.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -325,7 +325,7 @@
             <String>…/bounding-boxes-manual-ohm.js</String>
             <ConnectedNoteIDs>27</ConnectedNoteIDs>
         </Note>
-        <Note ID="38" FontSize="12.0" Position="462.566406,720.15625" Width="57.0">
+        <Note ID="38" FontSize="12.0" Position="463.0,720.0" Width="57.0">
             <Appearance>
                 <Alignment>Left</Alignment>
                 <Border Weight="1"></Border>
@@ -337,8 +337,8 @@
         <Note ID="40" FontSize="12.0" Position="463.0,748.0" Width="163.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1">0.794796 0.560965 0.58607</Border>
-                <Fill>0.957566 0.766747 0.999616</Fill>
+                <Border Weight="1">0.561855 0.71062 0.779401</Border>
+                <Fill>0.702319 0.888276 0.974252</Fill>
             </Appearance>
             <String>comments (based on tokens)</String>
             <ConnectedNoteIDs>1, 41</ConnectedNoteIDs>
@@ -352,14 +352,50 @@
             <String>…/pattern-matching/tokenizer/</String>
             <ConnectedNoteIDs>38, 40</ConnectedNoteIDs>
         </Note>
+        <Note ID="42" FontSize="12.0" Position="463.0,776.0" Width="44.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.794796 0.560965 0.58607</Border>
+                <Fill>0.957566 0.766747 0.999616</Fill>
+            </Appearance>
+            <String>strings</String>
+            <ConnectedNoteIDs>1</ConnectedNoteIDs>
+        </Note>
+        <Note ID="43" FontSize="12.0" Position="463.0,804.0" Width="23.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.794796 0.560965 0.58607</Border>
+                <Fill>0.993495 0.701207 0.732587</Fill>
+            </Appearance>
+            <String>ws</String>
+            <ConnectedNoteIDs>1</ConnectedNoteIDs>
+        </Note>
+        <Note ID="44" FontSize="12.0" Position="463.0,832.0" Width="60.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.794796 0.560965 0.58607</Border>
+                <Fill>0.993495 0.701207 0.732587</Fill>
+            </Appearance>
+            <String>identifiers</String>
+            <ConnectedNoteIDs>1</ConnectedNoteIDs>
+        </Note>
+        <Note ID="45" FontSize="12.0" Position="463.0,860.0" Width="51.0">
+            <Appearance>
+                <Alignment>Left</Alignment>
+                <Border Weight="1">0.794796 0.560965 0.58607</Border>
+                <Fill>0.993495 0.701207 0.732587</Fill>
+            </Appearance>
+            <String>integers</String>
+            <ConnectedNoteIDs>1</ConnectedNoteIDs>
+        </Note>
     </Notes>
     <BackgroundShapes></BackgroundShapes>
     <Stacks>
         <Stack>4, 8</Stack>
         <Stack>18-19</Stack>
-        <Stack>38, 40</Stack>
+        <Stack>38, 40, 42-45</Stack>
     </Stacks>
-    <AutoFit>0-1, 3-11, 13-14, 19, 24, 26, 29-30, 32-33, 35-38, 40-41</AutoFit>
+    <AutoFit>0-1, 3-11, 13-14, 19, 24, 26, 29-30, 32-33, 35-38, 40-45</AutoFit>
     <NoteStyles>
         <Style Name="Bubble (Blue)" ID="05A30106-FC93-4C2C-9566-6BF0D004AD2F" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
             <BorderThickness>1</BorderThickness>

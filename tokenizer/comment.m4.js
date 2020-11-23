@@ -1,22 +1,18 @@
-
-
-
-
 const commentGrammar = `
 comment {
      TokenArray = "[" NewToken ("," NewToken)* "]"
      NewToken = Comment | BasicToken
      Comment = SlashSlashToken ("," AnyBasicTokenExceptNewline)*
      SlashSlashToken = FirstSlashToken "," SlashToken 
-       FirstSlashToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," slashChar "," Line "," Column "}"
-       SlashToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," slashChar "," Line "," Column "}"
+       FirstSlashToken = "{" GVERYBASICKIND "," slashChar "," Line "," Column "}"
+       SlashToken = "{" GVERYBASICKIND "," slashChar "," Line "," Column "}"
        AnyBasicTokenExceptNewline = ~NewlineToken BasicToken
 
      slashChar = quote "text" quote ":" quote "/" quote
 
      // basic grammar
-     BasicToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," Text "," Line "," Column "}"
-       NewlineToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," newlineText "," Line "," Column "}"
+     BasicToken = "{" GVERYBASICKIND "," Text "," Line "," Column "}"
+       NewlineToken = "{" GVERYBASICKIND "," newlineText "," Line "," Column "}"
      BasicKind = quote "token" quote ":" quote "basic" quote
      AnyKind = quote "token" quote ":" quote identifier quote
      Line = quote "line" quote ":" integer
@@ -62,7 +58,7 @@ const commentSemantics = {
     SlashSlashToken: function (firstSlash, _comma, _slash) {
 	return firstSlash.comment ();
     },
-    FirstSlashToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
+    FirstSlashToken: function (_lbrace, SVERYBASICKIND, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
 	return {
 	    'token' : "basic",
 	    'text' : "/",
@@ -70,7 +66,7 @@ const commentSemantics = {
 	    'column' : column.comment ()
 	}
     },
-    SlashToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
+    SlashToken: function (_lbrace, SVERYBASICKIND, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
 	return {
 	    'token' : "basic",
 	    'text' : "/",
@@ -84,7 +80,7 @@ const commentSemantics = {
 	
     // include basicSemantics
     ,
-    NewlineToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
+    NewlineToken: function (_lbrace, SVERYBASICKIND, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
 	return { 
 	    'token' : "basic",
 	    'text' : "\n",
@@ -92,7 +88,7 @@ const commentSemantics = {
 	    'column' : column.basic ()
 	}
     },
-    BasicToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
+    BasicToken: function (_lbrace, SVERYBASICKIND, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
 	return {
 	    'token' : "basic",
 	    'text' : c.basic (),

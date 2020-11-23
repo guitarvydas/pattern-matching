@@ -2,22 +2,23 @@
 
 
 
-const commentGrammar = `
-comment {
+const stringsGrammar = `
+strings {
      TokenArray = "[" NewToken ("," NewToken)* "]"
-     NewToken = Comment | BasicToken
-     Comment = SlashSlashToken ("," AnyBasicTokenExceptNewline)*
-     SlashSlashToken = FirstSlashToken "," SlashToken 
-       FirstSlashToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," slashChar "," Line "," Column "}"
-       SlashToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," slashChar "," Line "," Column "}"
-       AnyBasicTokenExceptNewline = ~NewlineToken BasicToken
+     NewToken = String | BasicToken
 
-     slashChar = quote "text" quote ":" quote "/" quote
+     // strings
+     String = FirstStringDelimToken ("," AnyTokenExceptStringDelim)* "," StringDelimToken
+     StringDelimToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," StringDelimText "," Line "," Column "}"
+     StringDelimText = quote "text" quote ":" quote "\\\\\\"" quote
+     FirstStringDelimToken = StringDelimToken
+     AnyTokenExceptStringDelim = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," AnyTextExceptStringDelim "," Line "," Column "}"
+     AnyTextExceptStringDelim = quote "text" quote ":" quote (~"\\\\\\"" char) quote
+     // end strings
 
      // basic grammar
      BasicToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," Text "," Line "," Column "}"
        NewlineToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," newlineText "," Line "," Column "}"
-     BasicKind = quote "token" quote ":" quote "basic" quote
      AnyKind = quote "token" quote ":" quote identifier quote
      Line = quote "line" quote ":" integer
      Column = quote "column" quote ":" integer
@@ -41,49 +42,53 @@ comment {
    }
 `;
 
-const commentSemantics = {
+const stringsSemantics = {
     TokenArray: function (_lbracket, token, _comma, token_plural, _rbracket) {
-	var t1 = token.comment ();
-	var t2array = token_plural.comment ();
+	var t1 = token.strings ();
+	var t2array = token_plural.strings ();
 	t2array.unshift (t1);
 	return JSON.stringify (t2array);
     },
-    NewToken: function (token) { return token.comment (); },
-    Comment: function (slashSlashToken, _comma, anyTokenExceptNewline_plural) {
-	var first = slashSlashToken.comment ();
-	var text = joinText (anyTokenExceptNewline_plural.comment ());
-	return { 
-	    "token" : "comment", 
-	    "text" : text, 
-	    "line" : first.line, 
-	    "column" : first.column
-	}
-    },
-    SlashSlashToken: function (firstSlash, _comma, _slash) {
-	return firstSlash.comment ();
-    },
-    FirstSlashToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
-	return {
-	    'token' : "basic",
-	    'text' : "/",
-	    'line' : line.comment (),
-	    'column' : column.comment ()
-	}
-    },
-    SlashToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
-	return {
-	    'token' : "basic",
-	    'text' : "/",
-	    'line' : line.comment (),
-	    'column' : column.comment ()
-	}
-    },
-    AnyBasicTokenExceptNewline: function (basicToken) { return basicToken.comment (); },
-    slashChar: function (_q1, _text, _q2, _colon, _q3, _slash, _q4) { return "/"; }
+    NewToken: function (token) { return token.strings (); },
 
+
+    // String
+    String: function (firstStringDelimToken, _comma, anyTokenExceptStringDelim_plural,
+		      _comma2, _stringDelimToken) {
+	line = firstStringDelimToken.strings ().line;
+	column = firstStringDelimToken.strings ().column;
+	var text = joinText (anyTokenExceptStringDelim_plural.strings ());
+	return { "token" : "string", "text" : text, "line": line, "column": column };
+    },
+    StringDelimToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _stringDelimText, 
+				_comma2, line, _comma3, column, _rbrace) {
+	return { 
+	    "token" : "basic", 
+	    "text" : "\"", 
+	    "line" : line.strings (),
+	    "column" : column.strings ()
+	};
+    },
+    StringDelimText: function (_q1, _text, _q2, _colon, _q3, delim, _q4) { return delim.strings (); },
+    FirstStringDelimToken: function (stringDelimToken) { return stringDelimToken.strings (); },
+
+    AnyTokenExceptStringDelim: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, text, _comma2, line,
+					 _comma3, column, _rbrace) {
+	return { 
+	    "token" : identifier.strings (),
+	    "text": text.strings (),
+	    "line" : line.strings (),
+	    "column": column.strings ()
+	};
+    },
+
+    AnyTextExceptStringDelim: function ( _q1, _text, _q2, _colon, _q3, c, _q4) {
+	return c.strings ();
+    },
+    // end String
 	
     // include basicSemantics
-    ,
+    
     NewlineToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
 	return { 
 	    'token' : "basic",
@@ -94,7 +99,7 @@ const commentSemantics = {
     },
     BasicToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
 	return {
-	    'token' : "basic",
+	    'token' : identifier.basic (),
 	    'text' : c.basic (),
 	    'line' : line.basic (),
 	    'column' : column.basic ()
@@ -116,12 +121,11 @@ const commentSemantics = {
 	}
     },
     Text: function (_q1, _text, _q2, _colon, _q3, c_plural, _q4) { return c_plural.basic ().join (''); },
-    BasicKind: function (_q1, _kind, _q2, _colon, _q3, _basic, _q4) { return "basic"; },
     AnyKind: function (_q1, _kind, _q2, _colon, _q3, identifier, _q4) { return identifier.basic (); },
     newlineText: function (_q1, _text, _q2, _colon, _q3, _escape, _n, _q4) { return "\n"; },
 
     identifier: function (firstChar, followChar_plural) { 
-	return firstChar.string () + followChar_plural.basic ().join ('');
+	return firstChar.basic () + followChar_plural.basic ().join ('');
     },
     firstChar: function (c) { return c.basic (); },
     followChar: function (c) { return c.basic (); },
