@@ -1,3 +1,6 @@
+    // ...basicSemantics, // es6 spread operator merges object into object (basicSemantics into commentSemantics)
+
+
 const commentGrammar = basicGrammar + 
   `
   comment <: basic {

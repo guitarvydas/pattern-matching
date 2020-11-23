@@ -1,7 +1,9 @@
+// include the following rules in all subclasses:
+//     TokenArray = "[" Token ("," Token)* "]"
+//     Token = BasicToken
+
 const basicGrammar = `
   basic {
-     TokenArray = "[" Token ("," Token)* "]"
-     Token = BasicToken
      BasicToken = "{" BasicKind "," Text "," Line "," Column "}"
        NewlineToken = "{" BasicKind "," newlineChar "," Line "," Column "}"
        BasicTokenChar = "{" BasicKind "," char "," Line "," Column "}"
@@ -19,5 +21,10 @@ const basicGrammar = `
      escapedChar = escapeChar any
      simpleChar = any
      newlineChar = quote "text" quote ":" quote escapeChar "n" quote
+
+     identifier = firstChar followChar*
+     firstChar = "A".."Z" | "a".."z"
+     followChar = "A".."Z" | "a".."z" | "0".."9" | "-" | "_"
+
    }
 `;

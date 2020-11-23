@@ -1,4 +1,10 @@
 #!/bin/bash
-# cat html.js globals.js support.js parser.js tokenizer.js comment.js string.js run1.js run2.js run3.js >junk.js
-cat html.js globals.js support.js parser.js tokenizer.js basicGrammar.js basicSemantics.js comment.js run1.js run2.js >junk.js
+
+cat html.js globals.js support.js \
+    basicGrammar.js basicSemantics.js \
+    parser.js \
+    tokenizer.js \
+    comment.js \
+    run1.js run2.js >junk.js
+
 node junk.js

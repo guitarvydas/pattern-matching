@@ -1,16 +1,11 @@
-const stringGrammar = `
-strings {
-     TokenArray = "[" Token ("," Token)* "]"
-     Token = BasicToken
-     BasicToken = "{" Kind "," Text "," Line "," Column "}"
+const stringGrammar = basicGrammar + `
+strings <: basic {
+     Token := BasicToken
      StringToken = FirstStringDelimiterToken AnyTokenExceptStringDelimiter* StringDelimiterToken
   
        Kind = quote "token" quote ":" quote KindIdentifier quote
        KindIdentifier = identifier
 
-       identifier = firstChar followChar*
-       firstChar = "A".."Z" | "a".."z"
-       followChar = "A".."Z" | "a".."z" | "0".."9" | "-" | "_"
 
        FirstStringDelimiterToken = StringDelimiterToken
        StringDelimiterToken = "{" Kind "," stringDelimiter "," Line "," Column "}"
@@ -19,18 +14,6 @@ strings {
        stringDelimiter = quote
        AnyTokenExceptStringDelimiter = ~StringDelimiterToken BasicToken
 
-       BasicKind = quote "token" quote ":" quote "basic" quote
-       Line = quote "line" quote ":" integer
-       Column = quote "column" quote ":" integer
-
-       quote = "\\""
-       Text = quote "text" quote ":" char
-     
-       integer = num+
-       num = "0" .. "9"
-       char = quote (escapedChar | simpleChar) quote
-       escapedChar = "\\\\" any
-       simpleChar = any
   }
 `;
 
@@ -79,11 +62,6 @@ const stringSemantics = {
     AnyTokenExceptStringDelimiter: function (basicToken) { return basicToken.string (); },
 
     stringDelimiter: function (c) { return c.string (); },
-    identifier: function (firstChar, followChar_plural) { 
-	return firstChar.string () + followChar_plural.string ().join ('');
-    },
-    firstChar: function (c) { return c.string (); },
-    followChar: function (c) { return c.string (); },
 
     /// inherited from previous semantics
     
