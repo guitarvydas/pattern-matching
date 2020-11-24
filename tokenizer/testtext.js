@@ -8,4 +8,4 @@
 //const testText = 'a"str"//cmt\n';
 const testText = 'a bc def\nxyz//comment\nd e f\"teststring\"// yet another comment\nghi// final comment';
 // const testText = 'xyz';
-
+//const testText = 'ab  cd';
