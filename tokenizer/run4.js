@@ -1,6 +1,6 @@
-var p4 = new tokenParser ( true, 'ident', identGrammar, identSemantics );
-var p4g = new tokenParser ( true, 'ident', identGrammar );
-console.log ("4 (ident):");
+var p4 = new tokenParser ( true, 'ws', wsGrammar, wsSemantics );
+var p4g = new tokenParser ( true, 'ws', wsGrammar );
+console.log ("4 (ws):");
 console.log (
     lineify (
 	p4.parse (
