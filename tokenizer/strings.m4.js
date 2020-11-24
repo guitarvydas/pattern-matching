@@ -1,14 +1,14 @@
 const stringsGrammar = `
 strings {
      TokenArray = "[" NewToken ("," NewToken)* "]"
-     NewToken = String | BasicToken
+     NewToken = String | basicToken
 
      // strings
      String = FirstStringDelimToken ("," AnyTokenExceptStringDelim)* "," StringDelimToken
-     StringDelimToken = "{" GVERYBASICKIND "," StringDelimText "," Line "," Column "}"
+     StringDelimToken = "{" GVERYBASICKIND "," StringDelimText "," line "," column "}"
      StringDelimText = quote "text" quote ":" quote "\\\\\\"" quote
      FirstStringDelimToken = StringDelimToken
-     AnyTokenExceptStringDelim = "{" GVERYBASICKIND "," AnyTextExceptStringDelim "," Line "," Column "}"
+     AnyTokenExceptStringDelim = "{" GVERYBASICKIND "," AnyTextExceptStringDelim "," line "," column "}"
      AnyTextExceptStringDelim = quote "text" quote ":" quote (~"\\\\\\"" char) quote
      // end strings
 

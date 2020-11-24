@@ -10,8 +10,10 @@ function lineify (str) {
 };
 
 function makeToken (kind, str, line, column) {
-    var s = str.replace (/ /g, "_"); // spaces seem to go missing in text - not investigated
+//    var s = str.replace (/ /g, "_"); // spaces seem to go missing in text - not investigated
+    var s = str;
     var token = { 'token' : kind, 'text' : s, 'line' : line, 'column' : column };
     return token;
 };
+
 

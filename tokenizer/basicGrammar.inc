@@ -1,22 +1,21 @@
 define(<!BASICGRAMMAR!>,<!
-     BasicToken = "{" GVERYBASICKIND "," Text "," Line "," Column "}"
-       NewlineToken = "{" GVERYBASICKIND "," newlineText "," Line "," Column "}"
+     basicToken = "{" GVERYBASICKIND "," text "," line "," column "}"
+       NewlineToken = "{" GVERYBASICKIND "," newlinetext "," line "," column "}"
      BasicKind = quote "token" quote ":" quote "basic" quote
      AnyKind = quote "token" quote ":" quote identifier quote
-     Line = quote "line" quote ":" integer
-     Column = quote "column" quote ":" integer
+     line = quote "line" quote ":" integer
+     column = quote "column" quote ":" integer
 
      quote = "\\""
-     Text = quote "text" quote ":" quote char+ quote
+     text = quote "text" quote ":" quote char+ quote
      
      integer = num+
      num = "0" .. "9"
-     char = escapedChar | simpleChar
-     escape = "\\\\"
-     escapedChar = escape any
-     simpleChar = anyNotQuoteNorEscape
-     anyNotQuoteNorEscape = ~quote ~escape any
-     newlineText = quote "text" quote ":" quote escape "n" quote
+    char = escapedChar | simpleChar
+    simpleChar = ~quote ~escape any
+    escapedChar = ~quote escape any
+    escape = "\\\\"
+     newlinetext = quote "text" quote ":" quote escape "n" quote
 
      identifier = firstChar followChar*
      firstChar = "A".."Z" | "a".."z"

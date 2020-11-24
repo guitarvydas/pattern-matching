@@ -1,12 +1,12 @@
 const commentGrammar = `
 comment {
      TokenArray = "[" NewToken ("," NewToken)* "]"
-     NewToken = Comment | BasicToken
+     NewToken = Comment | basicToken
      Comment = SlashSlashToken ("," AnyBasicTokenExceptNewline)*
      SlashSlashToken = FirstSlashToken "," SlashToken 
-       FirstSlashToken = "{" GVERYBASICKIND "," slashChar "," Line "," Column "}"
-       SlashToken = "{" GVERYBASICKIND "," slashChar "," Line "," Column "}"
-       AnyBasicTokenExceptNewline = ~NewlineToken BasicToken
+       FirstSlashToken = "{" GVERYBASICKIND "," slashChar "," line "," column "}"
+       SlashToken = "{" GVERYBASICKIND "," slashChar "," line "," column "}"
+       AnyBasicTokenExceptNewline = ~NewlineToken basicToken
 
      slashChar = quote "text" quote ":" quote "/" quote
 

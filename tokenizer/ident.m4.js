@@ -1,13 +1,13 @@
 const identGrammar = `
 ident {
      TokenArray = "[" NewToken ("," NewToken)* "]"
-     NewToken = Ident | BasicToken
+     NewToken = Ident | basicToken
 
      // ident
      Ident = FirstCharToken ("," FollowCharToken)*
-       FirstCharToken = "{" GONLYBASICKIND "," FirstCharText "," Line "," Column "}"
+       FirstCharToken = "{" GONLYBASICKIND "," FirstCharText "," line "," column "}"
        FirstCharText = quote "text" quote ":" quote ("A".."Z" | "a".."z") quote
-       FollowCharToken = "{" GONLYBASICKIND "," FollowCharText "," Line "," Column "}"
+       FollowCharToken = "{" GONLYBASICKIND "," FollowCharText "," line "," column "}"
        FollowCharText = quote "text" quote ":" quote ("A".."Z" | "a".."z" | "0".."9" | "-" | "_") quote
      // end ident
 

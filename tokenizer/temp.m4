@@ -5,31 +5,30 @@ define(`GONLYBASICKIND',`"\\"" "token" "\\"" ":" "\\"" "basic" "\\""')
 changequote(<!,!>)
 
 define(<!BASICGRAMMAR!>,<!
-     BasicToken = "{" GVERYBASICKIND "," Text "," Line "," Column "}"
-       NewlineToken = "{" GVERYBASICKIND "," newlineText "," Line "," Column "}"
+     basicToken = "{" GVERYBASICKIND "," text "," line "," column "}"
+       NewlineToken = "{" GVERYBASICKIND "," newlinetext "," line "," column "}"
      BasicKind = quote "token" quote ":" quote "basic" quote
      AnyKind = quote "token" quote ":" quote identifier quote
-     Line = quote "line" quote ":" integer
-     Column = quote "column" quote ":" integer
+     line = quote "line" quote ":" integer
+     column = quote "column" quote ":" integer
 
      quote = "\\""
-     Text = quote "text" quote ":" quote char+ quote
+     text = quote "text" quote ":" quote char+ quote
      
      integer = num+
      num = "0" .. "9"
-     char = escapedChar | simpleChar
-     escape = "\\\\"
-     escapedChar = escape any
-     simpleChar = anyNotQuoteNorEscape
-     anyNotQuoteNorEscape = ~quote ~escape any
-     newlineText = quote "text" quote ":" quote escape "n" quote
+    char = escapedChar | simpleChar
+    simpleChar = ~quote ~escape any
+    escapedChar = ~quote escape any
+    escape = "\\\\"
+     newlinetext = quote "text" quote ":" quote escape "n" quote
 
      identifier = firstChar followChar*
      firstChar = "A".."Z" | "a".."z"
      followChar = "A".."Z" | "a".."z" | "0".."9" | "-" | "_"
 !>)
 define(<!BASICSEMANTICS!>,<!
-    NewlineToken: function (_lbrace, SVERYBASICKIND, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
+    NewlineToken: function (_lbrace, SVERYBASICKIND, _comma1, _newlinetext, _comma2, line, _comma3, column, _rbrace) { 
 	return { 
 	    'token' : "$1",
 	    'text' : "\n",
@@ -37,7 +36,7 @@ define(<!BASICSEMANTICS!>,<!
 	    'column' : column.$1 ()
 	}
     },
-    BasicToken: function (_lbrace, SVERYBASICKIND, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
+    basicToken: function (_lbrace, SVERYBASICKIND, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
 	return {
 	    'token' : identifier.$1 (),
 	    'text' : c.$1 (),
@@ -45,8 +44,8 @@ define(<!BASICSEMANTICS!>,<!
 	    'column' : column.$1 ()
 	}
     },
-    Line: function (_q1, _line, _q2, _colon, integer) { return integer.$1 (); },
-    Column: function (_q1, _column, _q2, _colon, integer) { return integer.$1 (); },
+    line: function (_q1, _line, _q2, _colon, integer) { return integer.$1 (); },
+    column: function (_q1, _column, _q2, _colon, integer) { return integer.$1 (); },
 
     integer: function (num_plural) { return parseInt (num_plural.$1 ().join ('')); },
     num: function (n) { return n.$1 (); },
@@ -60,9 +59,9 @@ define(<!BASICSEMANTICS!>,<!
 	    return c;
 	}
     },
-    Text: function (_q1, _text, _q2, _colon, _q3, c_plural, _q4) { return c_plural.$1 ().join (''); },
+    text: function (_q1, _text, _q2, _colon, _q3, c_plural, _q4) { return c_plural.$1 ().join (''); },
     AnyKind: function (_q1, _kind, _q2, _colon, _q3, identifier, _q4) { return identifier.$1 (); },
-    newlineText: function (_q1, _text, _q2, _colon, _q3, _escape, _n, _q4) { return "\n"; },
+    newlinetext: function (_q1, _text, _q2, _colon, _q3, _escape, _n, _q4) { return "\n"; },
 
     identifier: function (firstChar, followChar_plural) { 
 	return firstChar.$1 () + followChar_plural.$1 ().join ('');
@@ -76,13 +75,13 @@ define(<!BASICSEMANTICS!>,<!
 const identGrammar = `
 ident {
      TokenArray = "[" NewToken ("," NewToken)* "]"
-     NewToken = Ident | BasicToken
+     NewToken = Ident | basicToken
 
      // ident
      Ident = FirstCharToken ("," FollowCharToken)*
-       FirstCharToken = "{" GONLYBASICKIND "," FirstCharText "," Line "," Column "}"
+       FirstCharToken = "{" GONLYBASICKIND "," FirstCharText "," line "," column "}"
        FirstCharText = quote "text" quote ":" quote ("A".."Z" | "a".."z") quote
-       FollowCharToken = "{" GONLYBASICKIND "," FollowCharText "," Line "," Column "}"
+       FollowCharToken = "{" GONLYBASICKIND "," FollowCharText "," line "," column "}"
        FollowCharText = quote "text" quote ":" quote ("A".."Z" | "a".."z" | "0".."9" | "-" | "_") quote
      // end ident
 
