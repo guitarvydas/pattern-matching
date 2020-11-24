@@ -12,6 +12,9 @@ m4 temp.m4 >ws.js
 cat m4.m4 basicGrammar.inc basicSemantics.inc ident.m4.js >temp.m4
 m4 temp.m4 >ident.js
 
+cat m4.m4 basicGrammar.inc basicSemantics.inc integer.m4.js >temp.m4
+m4 temp.m4 >integer.js
+
 cat >junk.js \
     html.js globals.js support.js \
     basic.js \
@@ -21,11 +24,13 @@ cat >junk.js \
     strings.js \
     ws.js \
     ident.js \
+    integer.js \
     testtext.js \
     run1.js \
     run2.js \
     run3.js \
     run4.js \
-    run5.js
+    run5.js \
+    run6.js
 
 node junk.js

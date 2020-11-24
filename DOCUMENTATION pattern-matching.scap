@@ -355,8 +355,8 @@
         <Note ID="42" FontSize="12.0" Position="463.0,776.0" Width="44.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1">0.794796 0.560965 0.58607</Border>
-                <Fill>0.957566 0.766747 0.999616</Fill>
+                <Border Weight="1">0.561855 0.71062 0.779401</Border>
+                <Fill>0.702319 0.888276 0.974252</Fill>
             </Appearance>
             <String>strings</String>
             <ConnectedNoteIDs>1</ConnectedNoteIDs>
@@ -364,8 +364,8 @@
         <Note ID="43" FontSize="12.0" Position="463.0,804.0" Width="23.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1">0.794796 0.560965 0.58607</Border>
-                <Fill>0.993495 0.701207 0.732587</Fill>
+                <Border Weight="1">0.561855 0.71062 0.779401</Border>
+                <Fill>0.702319 0.888276 0.974252</Fill>
             </Appearance>
             <String>ws</String>
             <ConnectedNoteIDs>1</ConnectedNoteIDs>
@@ -373,8 +373,8 @@
         <Note ID="44" FontSize="12.0" Position="463.0,832.0" Width="60.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1">0.794796 0.560965 0.58607</Border>
-                <Fill>0.993495 0.701207 0.732587</Fill>
+                <Border Weight="1">0.561855 0.71062 0.779401</Border>
+                <Fill>0.702319 0.888276 0.974252</Fill>
             </Appearance>
             <String>identifiers</String>
             <ConnectedNoteIDs>1</ConnectedNoteIDs>
@@ -382,8 +382,8 @@
         <Note ID="45" FontSize="12.0" Position="463.0,860.0" Width="51.0">
             <Appearance>
                 <Alignment>Left</Alignment>
-                <Border Weight="1">0.794796 0.560965 0.58607</Border>
-                <Fill>0.993495 0.701207 0.732587</Fill>
+                <Border Weight="1">0.561855 0.71062 0.779401</Border>
+                <Fill>0.702319 0.888276 0.974252</Fill>
             </Appearance>
             <String>integers</String>
             <ConnectedNoteIDs>1</ConnectedNoteIDs>

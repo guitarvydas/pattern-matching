@@ -72,67 +72,60 @@ define(<!BASICSEMANTICS!>,<!
 
     _terminal: function() { return this.primitiveValue; }
 !>)
-const identGrammar = `
-ident {
+const integerGrammar = `
+integer {
      TokenArray = "[" NewToken ("," NewToken)* "]"
-     NewToken = Ident | basicToken
+     NewToken = int | basicToken
 
-     // ident
-     Ident = FirstCharToken ("," FollowCharToken)*
-       FirstCharToken = "{" GONLYBASICKIND "," FirstCharText "," line "," column "}"
-       FirstCharText = quote "text" quote ":" quote ("A".."Z" | "a".."z") quote
-       FollowCharToken = "{" GONLYBASICKIND "," FollowCharText "," line "," column "}"
-       FollowCharText = quote "text" quote ":" quote ("A".."Z" | "a".."z" | "0".."9" | "-" | "_") quote
-     // end ident
+    // integer
+    int = firstIntegerToken ("," integerToken)*
+    firstIntegerToken = integerToken
+    integerToken = "{" GVERYBASICKIND "," 
+        quote "text" quote ":" quote integerDigit quote 
+        "," line "," column "}"
+    integerDigit = "0".."9"
+    // end integer
 
 BASICGRAMMAR()
 
    }
 `;
 
-const identSemantics = {
+const integerSemantics = {
     TokenArray: function (_lbracket, token, _comma, token_plural, _rbracket) {
-	var t1 = token.ident ();
-	var t2array = token_plural.ident ();
+	var t1 = token.integer ();
+	var t2array = token_plural.integer ();
 	t2array.unshift (t1);
 	return JSON.stringify (t2array);
     },
-    NewToken: function (token) { return token.ident (); },
+    NewToken: function (token) { return token.integer (); },
 
-
-    // Ident
-    Ident: function (firstCharToken, _comma, followCharToken_plural) {
-	var tokenArray = followCharToken_plural.ident ();
-	tokenArray.unshift (firstCharToken.ident ());
+    // ingeger
+    int: function (firstIntegerToken, _comma, integerToken_plural) {
+	var tokenArray = integerToken_plural.integer ();
+	tokenArray.unshift (firstIntegerToken.integer ());
 	return {
-	    "token": "ident",
+	    "token" : "integer",
 	    "text" : joinText (tokenArray),
-	    "line" : firstCharToken.ident ().line,
-	    "offset" : firstCharToken.ident ().offset
-	};
-    },
-    FirstCharToken: function (_lbrace, SONLYBASICKIND, _comma1, c, 
-		     _comma2, line, _comma3, offset, _rbrace) {
-	return {
-	    "token" : "basic",
-	    "text"  : c.ident (),
-	    "line"  : line.ident (),
-	    "offset": offset.ident ()
+	    "line" : firstIntegerToken.integer ().line,
+	    "column" : firstIntegerToken.integer ().column
 	}
     },
-    FollowCharToken: function (_lbrace, SONLYBASICKIND, _comma1, c, 
-		     _comma2, line, _comma3, offset, _rbrace) {
-	return {
-	    "token" : "basic",
-	    "text"  : c.ident (),
-	    "line"  : -1, // don't care
-	    "offset": -1  // don't care
+    integerToken: function (token) { return token.integer (); },
+    integerToken: function (_lbrace, SONLYBASICKIND, _comma1,
+			       _q1, text, _q2, _colon, _q3, i, _q4,
+			       _comma2, line, _comma3, column, _rbrace) {
+	return { 
+	    "token": "integer",
+	    "text" : i.integer (),
+	    "line" : line.integer (),
+	    "column" : column.integer ()
 	}
     },
-    FirstCharText: function (_q1, _text, _q2, _colon, _q3, c, _q4) { return c.ident (); },
-    FollowCharText: function (_q1, _text, _q2, _colon, _q3, c, _q4) { return c.ident (); },
-    // end Ident
+    integer: function (c) { return c.integer (); },
+    // end integer
 
-BASICSEMANTICS(ident)
+
+    BASICSEMANTICS(integer)
 
 };

@@ -64,25 +64,25 @@ const identSemantics = {
 	    "token": "ident",
 	    "text" : joinText (tokenArray),
 	    "line" : firstCharToken.ident ().line,
-	    "offset" : firstCharToken.ident ().offset
+	    "column" : firstCharToken.ident ().column
 	};
     },
     FirstCharToken: function (_lbrace, _1,_2,_3,_4,_5,_6,_7, _comma1, c, 
-		     _comma2, line, _comma3, offset, _rbrace) {
+		     _comma2, line, _comma3, column, _rbrace) {
 	return {
 	    "token" : "basic",
 	    "text"  : c.ident (),
 	    "line"  : line.ident (),
-	    "offset": offset.ident ()
+	    "column": column.ident ()
 	}
     },
     FollowCharToken: function (_lbrace, _1,_2,_3,_4,_5,_6,_7, _comma1, c, 
-		     _comma2, line, _comma3, offset, _rbrace) {
+		     _comma2, line, _comma3, column, _rbrace) {
 	return {
 	    "token" : "basic",
 	    "text"  : c.ident (),
 	    "line"  : -1, // don't care
-	    "offset": -1  // don't care
+	    "column": -1  // don't care
 	}
     },
     FirstCharText: function (_q1, _text, _q2, _colon, _q3, c, _q4) { return c.ident (); },
