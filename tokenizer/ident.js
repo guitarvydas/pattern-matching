@@ -32,10 +32,10 @@ ident {
      
      integer = num+
      num = "0" .. "9"
-    char = escapedChar | simpleChar
-    simpleChar = ~quote ~escape any
-    escapedChar = ~quote escape any
-    escape = "\\\\"
+     char = escapedChar | simpleChar
+     simpleChar = ~quote ~escape any
+     escapedChar = ~quote escape any
+     escape = "\\\\"
      newlinetext = quote "text" quote ":" quote escape "n" quote
 
      identifier = firstChar followChar*
