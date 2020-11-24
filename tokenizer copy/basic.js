@@ -8,33 +8,37 @@
 
 const basicGrammar = `
   basic {
-     // basic grammar
      BasicToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," Text "," Line "," Column "}"
-       NewlineToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," newlineText "," Line "," Column "}"
-     AnyKind = quote "token" quote ":" quote identifier quote
+       NewlineToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," newlineChar "," Line "," Column "}"
+       BasicTokenChar = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," char "," Line "," Column "}"
+     "\\"" "token" "\\"" ":" "\\"" identifier "\\"" = quote "token" quote ":" quote "basic" quote
      Line = quote "line" quote ":" integer
      Column = quote "column" quote ":" integer
 
      quote = "\\""
-     Text = quote "text" quote ":" quote char+ quote
+     Text = quote "text" quote ":" char
      
      integer = num+
      num = "0" .. "9"
-     char = escapedChar | simpleChar
-     escape = "\\\\"
-     escapedChar = escape any
-     simpleChar = anyNotQuoteNorEscape
-     anyNotQuoteNorEscape = ~quote ~escape any
-     newlineText = quote "text" quote ":" quote escape "n" quote
+     char = quote (escapedChar | simpleChar) quote
+     escapeChar = "\\\\"
+     escapedChar = escapeChar any
+     simpleChar = any
+     newlineChar = quote "text" quote ":" quote escapeChar "n" quote
 
      identifier = firstChar followChar*
      firstChar = "A".."Z" | "a".."z"
      followChar = "A".."Z" | "a".."z" | "0".."9" | "-" | "_"
+
    }
 `;
 const basicSemantics = {    
-    // include basicSemantics
-    
+    TokenArray: function (_lbracket, token, _comma, token_plural, _rbracket) {
+	var t1 = token.basic ();
+	var t2array = token_plural.basic ();
+	t2array.unshift (t1);
+	return JSON.stringify (t2array);
+    },
     NewlineToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
 	return { 
 	    'token' : "basic",
@@ -45,7 +49,7 @@ const basicSemantics = {
     },
     BasicToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
 	return {
-	    'token' : identifier.basic (),
+	    'token' : "basic",
 	    'text' : c.basic (),
 	    'line' : line.basic (),
 	    'column' : column.basic ()
@@ -67,7 +71,6 @@ const basicSemantics = {
 	}
     },
     Text: function (_q1, _text, _q2, _colon, _q3, c_plural, _q4) { return c_plural.basic ().join (''); },
-    AnyKind: function (_q1, _kind, _q2, _colon, _q3, identifier, _q4) { return identifier.basic (); },
     newlineText: function (_q1, _text, _q2, _colon, _q3, _escape, _n, _q4) { return "\n"; },
 
     identifier: function (firstChar, followChar_plural) { 

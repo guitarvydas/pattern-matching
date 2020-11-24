@@ -1,17 +1,12 @@
+const stringsGrammar = `
+strings {
+     TokenArray = "[" NewToken ("," NewToken)* "]"
+     NewToken = BasicToken
 
-
-
-
-// include the following rules in all subclasses:
-//     TokenArray = "[" Token ("," Token)* "]"
-//     Token = BasicToken
-
-const basicGrammar = `
-  basic {
      // basic grammar
-     BasicToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," Text "," Line "," Column "}"
-       NewlineToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," newlineText "," Line "," Column "}"
-     AnyKind = quote "token" quote ":" quote identifier quote
+     BasicToken = "{" BasicKind "," Text "," Line "," Column "}"
+       NewlineToken = "{" BasicKind "," newlineText "," Line "," Column "}"
+     BasicKind = quote "token" quote ":" quote identifier quote
      Line = quote "line" quote ":" integer
      Column = quote "column" quote ":" integer
 
@@ -30,22 +25,33 @@ const basicGrammar = `
      identifier = firstChar followChar*
      firstChar = "A".."Z" | "a".."z"
      followChar = "A".."Z" | "a".."z" | "0".."9" | "-" | "_"
+
    }
 `;
-const basicSemantics = {    
+
+const stringsSemantics = {
+    TokenArray: function (_lbracket, token, _comma, token_plural, _rbracket) {
+	var t1 = token.strings ();
+	var t2array = token_plural.strings ();
+	t2array.unshift (t1);
+	return JSON.stringify (t2array);
+    },
+    NewToken: function (token) { return token.strings (); },
+
+	
     // include basicSemantics
     
-    NewlineToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
+    NewlineToken: function (_lbrace, basicKind, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
 	return { 
-	    'token' : "basic",
+	    'token' : basicKind.basic (),
 	    'text' : "\n",
 	    'line' : line.basic (),
 	    'column' : column.basic ()
 	}
     },
-    BasicToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
+    BasicToken: function (_lbrace, basicKind, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
 	return {
-	    'token' : identifier.basic (),
+	    'token' : basicKind.basic (),
 	    'text' : c.basic (),
 	    'line' : line.basic (),
 	    'column' : column.basic ()
@@ -67,16 +73,16 @@ const basicSemantics = {
 	}
     },
     Text: function (_q1, _text, _q2, _colon, _q3, c_plural, _q4) { return c_plural.basic ().join (''); },
-    AnyKind: function (_q1, _kind, _q2, _colon, _q3, identifier, _q4) { return identifier.basic (); },
+    BasicKind: function (_q1, _kind, _q2, _colon, _q3, _basic, _q4) { return "basic"; },
     newlineText: function (_q1, _text, _q2, _colon, _q3, _escape, _n, _q4) { return "\n"; },
 
     identifier: function (firstChar, followChar_plural) { 
-	return firstChar.basic () + followChar_plural.basic ().join ('');
+	return firstChar.string () + followChar_plural.basic ().join ('');
     },
     firstChar: function (c) { return c.basic (); },
     followChar: function (c) { return c.basic (); },
     
 
     _terminal: function() { return this.primitiveValue; }
+    
 };
-

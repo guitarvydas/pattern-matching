@@ -1,12 +1,7 @@
-// include the following rules in all subclasses:
-//     TokenArray = "[" Token ("," Token)* "]"
-//     Token = BasicToken
-
-const basicGrammar = `
-  basic {
-     // basic grammar
+define(<!BASICGRAMMAR!>,<!
      BasicToken = "{" GVERYBASICKIND "," Text "," Line "," Column "}"
        NewlineToken = "{" GVERYBASICKIND "," newlineText "," Line "," Column "}"
+     BasicKind = quote "token" quote ":" quote "basic" quote
      AnyKind = quote "token" quote ":" quote identifier quote
      Line = quote "line" quote ":" integer
      Column = quote "column" quote ":" integer
@@ -26,5 +21,4 @@ const basicGrammar = `
      identifier = firstChar followChar*
      firstChar = "A".."Z" | "a".."z"
      followChar = "A".."Z" | "a".."z" | "0".."9" | "-" | "_"
-   }
-`;
+!>)

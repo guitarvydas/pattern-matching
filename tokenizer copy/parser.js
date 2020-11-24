@@ -13,6 +13,9 @@ function tokenParser (inheritBasic, name, grammars, semanticsFunctions) {
 	    if (undefined != this.semanticsFunctions) {
 		var semantics = this.parser.createSemantics ();
 		semantics.addOperation (this.name, this.semanticsFunctions);
+		if (inheritBasic) {
+		    semantics.addOperation ('basic', basicSemantics);
+		};
 		this.sem = (semantics (this.result))[name] ();
 		return this.sem;
 	    } else {
