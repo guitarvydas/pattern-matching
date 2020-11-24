@@ -1,5 +1,7 @@
 define(`SVERYBASICKIND',`_1,_2,_3,_4,_5,identifier,_7')
 define(`GVERYBASICKIND',`"\\"" "token" "\\"" ":" "\\"" identifier "\\""')
+define(`SONLYBASICKIND',`_1,_2,_3,_4,_5,_6,_7')
+define(`GONLYBASICKIND',`"\\"" "token" "\\"" ":" "\\"" "basic" "\\""')
 changequote(<!,!>)
 
 define(<!BASICGRAMMAR!>,<!
@@ -71,70 +73,67 @@ define(<!BASICSEMANTICS!>,<!
 
     _terminal: function() { return this.primitiveValue; }
 !>)
-const stringsGrammar = `
-strings {
+const identGrammar = `
+ident {
      TokenArray = "[" NewToken ("," NewToken)* "]"
-     NewToken = String | BasicToken
+     NewToken = Ident | BasicToken
 
-     // strings
-     String = FirstStringDelimToken ("," AnyTokenExceptStringDelim)* "," StringDelimToken
-     StringDelimToken = "{" GVERYBASICKIND "," StringDelimText "," Line "," Column "}"
-     StringDelimText = quote "text" quote ":" quote "\\\\\\"" quote
-     FirstStringDelimToken = StringDelimToken
-     AnyTokenExceptStringDelim = "{" GVERYBASICKIND "," AnyTextExceptStringDelim "," Line "," Column "}"
-     AnyTextExceptStringDelim = quote "text" quote ":" quote (~"\\\\\\"" char) quote
-     // end strings
+     // ident
+     Ident = FirstCharToken ("," FollowCharToken)*
+       FirstCharToken = "{" GONLYBASICKIND "," FirstCharText "," Line "," Column "}"
+       FirstCharText = quote "text" quote ":" quote ("A".."Z" | "a".."z") quote
+       FollowCharToken = "{" GONLYBASICKIND "," FollowCharText "," Line "," Column "}"
+       FollowCharText = quote "text" quote ":" quote ("A".."Z" | "a".."z" | "0".."9" | "-" | "_") quote
+     // end ident
 
 BASICGRAMMAR()
 
    }
 `;
 
-const stringsSemantics = {
+const identSemantics = {
     TokenArray: function (_lbracket, token, _comma, token_plural, _rbracket) {
-	var t1 = token.strings ();
-	var t2array = token_plural.strings ();
+	var t1 = token.ident ();
+	var t2array = token_plural.ident ();
 	t2array.unshift (t1);
 	return JSON.stringify (t2array);
     },
-    NewToken: function (token) { return token.strings (); },
+    NewToken: function (token) { return token.ident (); },
 
 
-    // String
-    String: function (firstStringDelimToken, _comma, anyTokenExceptStringDelim_plural,
-		      _comma2, _stringDelimToken) {
-	line = firstStringDelimToken.strings ().line;
-	column = firstStringDelimToken.strings ().column;
-	var text = joinText (anyTokenExceptStringDelim_plural.strings ());
-	return { "token" : "string", "text" : text, "line": line, "column": column };
-    },
-    StringDelimToken: function (_lbrace, SVERYBASICKIND, _comma1, _stringDelimText, 
-				_comma2, line, _comma3, column, _rbrace) {
-	return { 
-	    "token" : "basic", 
-	    "text" : "\"", 
-	    "line" : line.strings (),
-	    "column" : column.strings ()
+    // Ident
+    Ident: function (firstCharToken, _comma, followCharToken_plural) {
+	var tokenArray = followCharToken_plural.ident ();
+	tokenArray.unshift (firstCharToken.ident ());
+	return {
+	    "token": "ident",
+	    "text" : joinText (tokenArray),
+	    "line" : firstCharToken.ident ().line,
+	    "offset" : firstCharToken.ident ().offset
 	};
     },
-    StringDelimText: function (_q1, _text, _q2, _colon, _q3, delim, _q4) { return delim.strings (); },
-    FirstStringDelimToken: function (stringDelimToken) { return stringDelimToken.strings (); },
-
-    AnyTokenExceptStringDelim: function (_lbrace, SVERYBASICKIND, _comma1, text, _comma2, line,
-					 _comma3, column, _rbrace) {
-	return { 
-	    "token" : identifier.strings (),
-	    "text": text.strings (),
-	    "line" : line.strings (),
-	    "column": column.strings ()
-	};
+    FirstCharToken: function (_lbrace, SONLYBASICKIND, _comma1, c, 
+		     _comma2, line, _comma3, offset, _rbrace) {
+	return {
+	    "token" : "basic",
+	    "text"  : c.ident (),
+	    "line"  : line.ident (),
+	    "offset": offset.ident ()
+	}
     },
-
-    AnyTextExceptStringDelim: function ( _q1, _text, _q2, _colon, _q3, c, _q4) {
-	return c.strings ();
+    FollowCharToken: function (_lbrace, SONLYBASICKIND, _comma1, c, 
+		     _comma2, line, _comma3, offset, _rbrace) {
+	return {
+	    "token" : "basic",
+	    "text"  : c.ident (),
+	    "line"  : -1, // don't care
+	    "offset": -1  // don't care
+	}
     },
-    // end String
+    FirstCharText: function (_q1, _text, _q2, _colon, _q3, c, _q4) { return c.ident (); },
+    FollowCharText: function (_q1, _text, _q2, _colon, _q3, c, _q4) { return c.ident (); },
+    // end Ident
 
-    BASICSEMANTICS(strings)
+BASICSEMANTICS(ident)
 
 };

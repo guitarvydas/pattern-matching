@@ -4,6 +4,8 @@
 
 
 
+
+
 const commentGrammar = `
 comment {
      TokenArray = "[" NewToken ("," NewToken)* "]"
