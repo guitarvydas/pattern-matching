@@ -4,27 +4,27 @@
 
 const basicGrammar = `
   basic {
-     // basic grammar
      BasicToken = "{" GVERYBASICKIND "," Text "," Line "," Column "}"
-       NewlineToken = "{" GVERYBASICKIND "," newlineText "," Line "," Column "}"
-     AnyKind = quote "token" quote ":" quote identifier quote
+       NewlineToken = "{" GVERYBASICKIND "," newlineChar "," Line "," Column "}"
+       BasicTokenChar = "{" GVERYBASICKIND "," char "," Line "," Column "}"
+     GVERYBASICKIND = quote "token" quote ":" quote "basic" quote
      Line = quote "line" quote ":" integer
      Column = quote "column" quote ":" integer
 
      quote = "\\""
-     Text = quote "text" quote ":" quote char+ quote
+     Text = quote "text" quote ":" char
      
      integer = num+
      num = "0" .. "9"
-     char = escapedChar | simpleChar
-     escape = "\\\\"
-     escapedChar = escape any
-     simpleChar = anyNotQuoteNorEscape
-     anyNotQuoteNorEscape = ~quote ~escape any
-     newlineText = quote "text" quote ":" quote escape "n" quote
+     char = quote (escapedChar | simpleChar) quote
+     escapeChar = "\\\\"
+     escapedChar = escapeChar any
+     simpleChar = any
+     newlineChar = quote "text" quote ":" quote escapeChar "n" quote
 
      identifier = firstChar followChar*
      firstChar = "A".."Z" | "a".."z"
      followChar = "A".."Z" | "a".."z" | "0".."9" | "-" | "_"
+
    }
 `;

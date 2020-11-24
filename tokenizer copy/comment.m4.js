@@ -1,24 +1,18 @@
-
-
-
-
-
-
 const commentGrammar = `
 comment {
      TokenArray = "[" NewToken ("," NewToken)* "]"
      NewToken = Comment | BasicToken
      Comment = SlashSlashToken ("," AnyBasicTokenExceptNewline)*
      SlashSlashToken = FirstSlashToken "," SlashToken 
-       FirstSlashToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," slashChar "," Line "," Column "}"
-       SlashToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," slashChar "," Line "," Column "}"
+       FirstSlashToken = "{" GVERYBASICKIND "," slashChar "," Line "," Column "}"
+       SlashToken = "{" GVERYBASICKIND "," slashChar "," Line "," Column "}"
        AnyBasicTokenExceptNewline = ~NewlineToken BasicToken
 
      slashChar = quote "text" quote ":" quote "/" quote
 
-
-     BasicToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," Text "," Line "," Column "}"
-       NewlineToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," newlineText "," Line "," Column "}"
+     // basic grammar
+     BasicToken = "{" GVERYBASICKIND "," Text "," Line "," Column "}"
+       NewlineToken = "{" GVERYBASICKIND "," newlineText "," Line "," Column "}"
      BasicKind = quote "token" quote ":" quote "basic" quote
      AnyKind = quote "token" quote ":" quote identifier quote
      Line = quote "line" quote ":" integer
@@ -39,7 +33,6 @@ comment {
      identifier = firstChar followChar*
      firstChar = "A".."Z" | "a".."z"
      followChar = "A".."Z" | "a".."z" | "0".."9" | "-" | "_"
-
 
    }
 `;
@@ -65,7 +58,7 @@ const commentSemantics = {
     SlashSlashToken: function (firstSlash, _comma, _slash) {
 	return firstSlash.comment ();
     },
-    FirstSlashToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
+    FirstSlashToken: function (_lbrace, SVERYBASICKIND, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
 	return {
 	    'token' : "basic",
 	    'text' : "/",
@@ -73,7 +66,7 @@ const commentSemantics = {
 	    'column' : column.comment ()
 	}
     },
-    SlashToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
+    SlashToken: function (_lbrace, SVERYBASICKIND, _comma1, _slash, _comma2, line, _comma3, column, _rbrace) { 
 	return {
 	    'token' : "basic",
 	    'text' : "/",
@@ -82,52 +75,54 @@ const commentSemantics = {
 	}
     },
     AnyBasicTokenExceptNewline: function (basicToken) { return basicToken.comment (); },
-    slashChar: function (_q1, _text, _q2, _colon, _q3, _slash, _q4) { return "/"; },
+    slashChar: function (_q1, _text, _q2, _colon, _q3, _slash, _q4) { return "/"; }
 
-
-    NewlineToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
+	
+    // include basicSemantics
+    ,
+    NewlineToken: function (_lbrace, SVERYBASICKIND, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
 	return { 
-	    'token' : "comment",
+	    'token' : "basic",
 	    'text' : "\n",
-	    'line' : line.comment (),
-	    'column' : column.comment ()
+	    'line' : line.basic (),
+	    'column' : column.basic ()
 	}
     },
-    BasicToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
+    BasicToken: function (_lbrace, SVERYBASICKIND, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
 	return {
-	    'token' : identifier.comment (),
-	    'text' : c.comment (),
-	    'line' : line.comment (),
-	    'column' : column.comment ()
+	    'token' : "basic",
+	    'text' : c.basic (),
+	    'line' : line.basic (),
+	    'column' : column.basic ()
 	}
     },
-    Line: function (_q1, _line, _q2, _colon, integer) { return integer.comment (); },
-    Column: function (_q1, _column, _q2, _colon, integer) { return integer.comment (); },
+    Line: function (_q1, _line, _q2, _colon, integer) { return integer.basic (); },
+    Column: function (_q1, _column, _q2, _colon, integer) { return integer.basic (); },
 
-    integer: function (num_plural) { return parseInt (num_plural.comment ().join ('')); },
-    num: function (n) { return n.comment (); },
-    char: function (c) { return c.comment (); },
-    simpleChar: function (c) { return c.comment (); },
+    integer: function (num_plural) { return parseInt (num_plural.basic ().join ('')); },
+    num: function (n) { return n.basic (); },
+    char: function (c) { return c.basic (); },
+    simpleChar: function (c) { return c.basic (); },
     escapedChar: function (_backSlash, any) { 
-	var c = any.comment ();
+	var c = any.basic ();
 	if (c == "n") {
 	    return "\n";
 	} else {
 	    return c;
 	}
     },
-    Text: function (_q1, _text, _q2, _colon, _q3, c_plural, _q4) { return c_plural.comment ().join (''); },
-    AnyKind: function (_q1, _kind, _q2, _colon, _q3, identifier, _q4) { return identifier.comment (); },
+    Text: function (_q1, _text, _q2, _colon, _q3, c_plural, _q4) { return c_plural.basic ().join (''); },
+    BasicKind: function (_q1, _kind, _q2, _colon, _q3, _basic, _q4) { return "basic"; },
+    AnyKind: function (_q1, _kind, _q2, _colon, _q3, identifier, _q4) { return identifier.basic (); },
     newlineText: function (_q1, _text, _q2, _colon, _q3, _escape, _n, _q4) { return "\n"; },
 
     identifier: function (firstChar, followChar_plural) { 
-	return firstChar.comment () + followChar_plural.comment ().join ('');
+	return firstChar.string () + followChar_plural.basic ().join ('');
     },
-    firstChar: function (c) { return c.comment (); },
-    followChar: function (c) { return c.comment (); },
+    firstChar: function (c) { return c.basic (); },
+    followChar: function (c) { return c.basic (); },
     
 
     _terminal: function() { return this.primitiveValue; }
-
-
+    
 };

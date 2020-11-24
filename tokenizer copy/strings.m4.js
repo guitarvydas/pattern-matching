@@ -1,9 +1,3 @@
-
-
-
-
-
-
 const stringsGrammar = `
 strings {
      TokenArray = "[" NewToken ("," NewToken)* "]"
@@ -11,17 +5,16 @@ strings {
 
      // strings
      String = FirstStringDelimToken ("," AnyTokenExceptStringDelim)* "," StringDelimToken
-     StringDelimToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," StringDelimText "," Line "," Column "}"
+     StringDelimToken = "{" GVERYBASICKIND "," StringDelimText "," Line "," Column "}"
      StringDelimText = quote "text" quote ":" quote "\\\\\\"" quote
      FirstStringDelimToken = StringDelimToken
-     AnyTokenExceptStringDelim = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," AnyTextExceptStringDelim "," Line "," Column "}"
+     AnyTokenExceptStringDelim = "{" GVERYBASICKIND "," AnyTextExceptStringDelim "," Line "," Column "}"
      AnyTextExceptStringDelim = quote "text" quote ":" quote (~"\\\\\\"" char) quote
      // end strings
 
-
-     BasicToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," Text "," Line "," Column "}"
-       NewlineToken = "{" "\\"" "token" "\\"" ":" "\\"" identifier "\\"" "," newlineText "," Line "," Column "}"
-     BasicKind = quote "token" quote ":" quote "basic" quote
+     // basic grammar
+     BasicToken = "{" GVERYBASICKIND "," Text "," Line "," Column "}"
+       NewlineToken = "{" GVERYBASICKIND "," newlineText "," Line "," Column "}"
      AnyKind = quote "token" quote ":" quote identifier quote
      Line = quote "line" quote ":" integer
      Column = quote "column" quote ":" integer
@@ -41,7 +34,6 @@ strings {
      identifier = firstChar followChar*
      firstChar = "A".."Z" | "a".."z"
      followChar = "A".."Z" | "a".."z" | "0".."9" | "-" | "_"
-
 
    }
 `;
@@ -64,7 +56,7 @@ const stringsSemantics = {
 	var text = joinText (anyTokenExceptStringDelim_plural.strings ());
 	return { "token" : "string", "text" : text, "line": line, "column": column };
     },
-    StringDelimToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _stringDelimText, 
+    StringDelimToken: function (_lbrace, SVERYBASICKIND, _comma1, _stringDelimText, 
 				_comma2, line, _comma3, column, _rbrace) {
 	return { 
 	    "token" : "basic", 
@@ -76,7 +68,7 @@ const stringsSemantics = {
     StringDelimText: function (_q1, _text, _q2, _colon, _q3, delim, _q4) { return delim.strings (); },
     FirstStringDelimToken: function (stringDelimToken) { return stringDelimToken.strings (); },
 
-    AnyTokenExceptStringDelim: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, text, _comma2, line,
+    AnyTokenExceptStringDelim: function (_lbrace, SVERYBASICKIND, _comma1, text, _comma2, line,
 					 _comma3, column, _rbrace) {
 	return { 
 	    "token" : identifier.strings (),
@@ -90,51 +82,51 @@ const stringsSemantics = {
 	return c.strings ();
     },
     // end String
-
+	
+    // include basicSemantics
     
-    NewlineToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
+    NewlineToken: function (_lbrace, SVERYBASICKIND, _comma1, _newlineText, _comma2, line, _comma3, column, _rbrace) { 
 	return { 
-	    'token' : "strings",
+	    'token' : "basic",
 	    'text' : "\n",
-	    'line' : line.strings (),
-	    'column' : column.strings ()
+	    'line' : line.basic (),
+	    'column' : column.basic ()
 	}
     },
-    BasicToken: function (_lbrace, _1,_2,_3,_4,_5,identifier,_7, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
+    BasicToken: function (_lbrace, SVERYBASICKIND, _comma1, c, _comma2, line, _comma3, column, _rbrace) { 
 	return {
-	    'token' : identifier.strings (),
-	    'text' : c.strings (),
-	    'line' : line.strings (),
-	    'column' : column.strings ()
+	    'token' : identifier.basic (),
+	    'text' : c.basic (),
+	    'line' : line.basic (),
+	    'column' : column.basic ()
 	}
     },
-    Line: function (_q1, _line, _q2, _colon, integer) { return integer.strings (); },
-    Column: function (_q1, _column, _q2, _colon, integer) { return integer.strings (); },
+    Line: function (_q1, _line, _q2, _colon, integer) { return integer.basic (); },
+    Column: function (_q1, _column, _q2, _colon, integer) { return integer.basic (); },
 
-    integer: function (num_plural) { return parseInt (num_plural.strings ().join ('')); },
-    num: function (n) { return n.strings (); },
-    char: function (c) { return c.strings (); },
-    simpleChar: function (c) { return c.strings (); },
+    integer: function (num_plural) { return parseInt (num_plural.basic ().join ('')); },
+    num: function (n) { return n.basic (); },
+    char: function (c) { return c.basic (); },
+    simpleChar: function (c) { return c.basic (); },
     escapedChar: function (_backSlash, any) { 
-	var c = any.strings ();
+	var c = any.basic ();
 	if (c == "n") {
 	    return "\n";
 	} else {
 	    return c;
 	}
     },
-    Text: function (_q1, _text, _q2, _colon, _q3, c_plural, _q4) { return c_plural.strings ().join (''); },
-    AnyKind: function (_q1, _kind, _q2, _colon, _q3, identifier, _q4) { return identifier.strings (); },
+    Text: function (_q1, _text, _q2, _colon, _q3, c_plural, _q4) { return c_plural.basic ().join (''); },
+    AnyKind: function (_q1, _kind, _q2, _colon, _q3, identifier, _q4) { return identifier.basic (); },
     newlineText: function (_q1, _text, _q2, _colon, _q3, _escape, _n, _q4) { return "\n"; },
 
     identifier: function (firstChar, followChar_plural) { 
-	return firstChar.strings () + followChar_plural.strings ().join ('');
+	return firstChar.basic () + followChar_plural.basic ().join ('');
     },
-    firstChar: function (c) { return c.strings (); },
-    followChar: function (c) { return c.strings (); },
+    firstChar: function (c) { return c.basic (); },
+    followChar: function (c) { return c.basic (); },
     
 
     _terminal: function() { return this.primitiveValue; }
-
-
+    
 };
