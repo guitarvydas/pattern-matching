@@ -4,6 +4,8 @@
 
 
 
+
+
 const stringsGrammar = `
 strings {
      TokenArray = "[" NewToken ("," NewToken)* "]"
